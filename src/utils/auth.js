@@ -24,7 +24,7 @@ export const generateRefreshToken = (data) => {
 };
 
 export const verifyPassword = async (password, hashedPassword) => {
-  const isValidPassword = compare(password, hashedPassword);
+  const isValidPassword = await compare(password, hashedPassword);
   return isValidPassword;
 };
 

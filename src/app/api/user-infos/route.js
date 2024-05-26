@@ -11,7 +11,23 @@ export async function GET() {
       return Response.json({ message: "You are't loggined" }, { status: 401 });
     }
 
-    const user = await UserModel.findOne({ email: tokenPayload.email }, "email");
+    const user = await UserModel.findOne(
+      { email: tokenPayload.email },
+      `username
+    firstname
+    lastname
+    state
+    city
+    address
+    postalCode
+    numberPhone
+    landline
+    nationalityCode
+    numberCard
+    shabaCard
+    job
+    company`
+    );
 
     return Response.json(user, { status: 200 });
   } catch (err) {
@@ -21,15 +37,15 @@ export async function GET() {
 export async function PUT(req) {
   try {
     connectToDB();
-    // const tokenPayload = isValidToken();
+    const tokenPayload = isValidToken();
 
-    // if (!tokenPayload) {
-    //   return Response.json({ message: "You are't loggined" }, { status: 401 });
-    // }
+    if (!tokenPayload) {
+      return Response.json({ message: "You are't loggined" }, { status: 401 });
+    }
     const body = await req.json();
-    // const user = await UserModel.findOneAndUpdate({ email: "ali@gmail.com" }, body);
+    const user = await UserModel.findOneAndUpdate({ email: tokenPayload.email }, body, { new: true });
 
-    return Response.json(body, { status: 200 });
+    return Response.json(user, { status: 200 });
   } catch (err) {
     return Response.json({ message: `Server Internal Error: ${err}` }, { status: 500 });
   }

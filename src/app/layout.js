@@ -5,6 +5,7 @@ import SigninForm from "@/components/templates/SignupForm/SignupForm";
 import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import QuicklyAccessProducts from "@/components/templates/QuicklyAccessProducts/QuicklyAccessProducts";
+import { Toaster } from "react-hot-toast";
 
 export const metadata = {
   title: "ToolShop | فروشگاه ابزار",
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }) {
           </div>
 
           <QuicklyAccessProducts />
+          <Toaster position="top-right" />
         </ReduxProvider>
       </body>
     </html>

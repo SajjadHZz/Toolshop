@@ -193,8 +193,11 @@ export default function Basket() {
           </p>
           <Link
             href="/payment"
+            scroll
             type="button"
-            className={`btn btn-block btn-primary rounded-full ${basket.list.length || "btn-disabled"}`}
+            className={`btn btn-block btn-primary rounded-full ${
+              (basket.list.length && user.email) || "btn-disabled"
+            }`}
           >
             ادامه جهت تسویه حساب
           </Link>

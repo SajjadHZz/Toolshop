@@ -143,14 +143,14 @@ export function LogoutIcon() {
     </svg>
   );
 }
-export function CurrentOrders() {
+export function CurrentOrders({ size, color }) {
   return (
     <svg
-      width="20"
-      height="22"
+      width={size}
+      height={size}
       viewBox="0 0 20 22"
       fill="none"
-      className="inline-block w-8 h-8 stroke-primary"
+      className={`inline-block w-8 h-8 stroke-${color}`}
     >
       <path
         d="M9.75079 17.9917C11.9599 17.9917 13.7508 16.2008 13.7508 13.9917C13.7508 11.7826 11.9599 9.9917 9.75079 9.9917C7.54165 9.9917 5.75079 11.7826 5.75079 13.9917C5.75079 16.2008 7.54165 17.9917 9.75079 17.9917Z"
@@ -183,9 +183,9 @@ export function CurrentOrders() {
     </svg>
   );
 }
-export function DeliveryOrders() {
+export function DeliveryOrders({ size, color }) {
   return (
-    <svg width="30" height="32" viewBox="0 0 20 22" fill="none" className="stroke-primary">
+    <svg width={size} height={size} viewBox="0 0 20 22" fill="none" className="stroke-success">
       <path
         d="M10 18C12.2091 18 14 16.2091 14 14C14 11.7909 12.2091 10 10 10C7.79086 10 6 11.7909 6 14C6 16.2091 7.79086 18 10 18Z"
         strokeWidth="1.5"
@@ -216,9 +216,9 @@ export function DeliveryOrders() {
     </svg>
   );
 }
-export function ReturnOrders() {
+export function ReturnOrders({ size, color }) {
   return (
-    <svg width="28" height="28" viewBox="0 0 23 23" fill="none" className="stroke-primary">
+    <svg width={size} height={size} viewBox="0 0 23 23" fill="none" className={`stroke-${color}`}>
       <path
         d="M15 2V12C15 13.1 14.1 14 13 14H2V7.62C2.73 8.49 3.85003 9.03 5.09003 9C6.10003 8.98 7.01 8.59 7.69 7.94C8 7.68 8.26002 7.34999 8.46002 6.98999C8.82002 6.37999 9.02 5.65997 9 4.90997C8.97 3.73997 8.45001 2.71 7.64001 2H15Z"
         strokeWidth="1.5"
@@ -273,9 +273,9 @@ export function ReturnOrders() {
     </svg>
   );
 }
-export function CanceledOrders() {
+export function CanceledOrders({ size, color }) {
   return (
-    <svg width="30" height="32" viewBox="0 0 20 22" fill="none" className="stroke-primary">
+    <svg width={size} height={size} viewBox="0 0 20 22" fill="none" className={`stroke-${color}`}>
       <path
         d="M10 18C12.2091 18 14 16.2091 14 14C14 11.7909 12.2091 10 10 10C7.79086 10 6 11.7909 6 14C6 16.2091 7.79086 18 10 18Z"
         strokeWidth="1.5"
@@ -284,8 +284,16 @@ export function CanceledOrders() {
         strokeLinejoin="round"
       />
       <path
-        d="M8.43999 14L9.09 14.65C9.28 14.84 9.58999 14.85 9.77999 14.66L11.56 13.02"
+        d="M11.07 15.11L8.95 13"
         strokeWidth="1.5"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M11.05 13.02L8.93001 15.14"
+        strokeWidth="1.5"
+        strokeMiterlimit="10"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -334,9 +342,9 @@ export function WalletIcon() {
     </svg>
   );
 }
-export function ShoppingCartFill() {
+export function ShoppingCartFill({ size, color }) {
   return (
-    <svg width="55" height="49" viewBox="0 0 75 79" fill="none" className="fill-black">
+    <svg width={size} height={size} viewBox="0 0 75 79" fill="none" className={`fill-${color}`}>
       <path d="M55.3949 78.4764C58.9642 78.4764 61.8577 75.5829 61.8577 72.0136C61.8577 68.4443 58.9642 65.5509 55.3949 65.5509C51.8256 65.5509 48.9321 68.4443 48.9321 72.0136C48.9321 75.5829 51.8256 78.4764 55.3949 78.4764Z" />
       <path d="M25.8509 78.4764C29.4202 78.4764 32.3137 75.5829 32.3137 72.0136C32.3137 68.4443 29.4202 65.5509 25.8509 65.5509C22.2817 65.5509 19.3882 68.4443 19.3882 72.0136C19.3882 75.5829 22.2817 78.4764 25.8509 78.4764Z" />
       <path d="M13.2579 9.93419L12.5193 18.9821C12.3716 20.7178 13.738 22.158 15.4737 22.158H72.0136C73.5647 22.158 74.8572 20.9763 74.968 19.4252C75.4481 12.8886 70.4626 7.57066 63.9259 7.57066H18.5389C18.1696 5.94574 17.431 4.39468 16.2862 3.10213C14.4397 1.14483 11.8546 0 9.19559 0H2.76976C1.25562 0 0 1.25562 0 2.76976C0 4.28389 1.25562 5.53951 2.76976 5.53951H9.19559C10.3404 5.53951 11.4114 6.0196 12.1869 6.83206C12.9625 7.68145 13.3318 8.78936 13.2579 9.93419Z" />
@@ -796,6 +804,89 @@ export function ArrowLeft() {
         d="M33.4922 9.50386H3.49219"
         strokeWidth="5"
         strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function HeartFillIcon({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 18" fill="none" className={`fill-${color}`}>
+      <path d="M14.44 0.101562C12.63 0.101562 11.01 0.981562 10 2.33156C8.99 0.981562 7.37 0.101562 5.56 0.101562C2.49 0.101562 0 2.60156 0 5.69156C0 6.88156 0.19 7.98156 0.52 9.00156C2.1 14.0016 6.97 16.9916 9.38 17.8116C9.72 17.9316 10.28 17.9316 10.62 17.8116C13.03 16.9916 17.9 14.0016 19.48 9.00156C19.81 7.98156 20 6.88156 20 5.69156C20 2.60156 17.51 0.101562 14.44 0.101562Z" />
+    </svg>
+  );
+}
+export function DashboardFillIcon({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" className={`fill-${color}`}>
+      <path d="M19.5 8.9V2.1C19.5 0.6 18.86 0 17.27 0H13.23C11.64 0 11 0.6 11 2.1V8.9C11 10.4 11.64 11 13.23 11H17.27C18.86 11 19.5 10.4 19.5 8.9Z" />
+      <path d="M9 11.1V17.9C9 19.4 8.36 20 6.77 20H2.73C1.14 20 0.5 19.4 0.5 17.9V11.1C0.5 9.6 1.14 9 2.73 9H6.77C8.36 9 9 9.6 9 11.1Z" />
+      <path d="M19.5 17.9V15.1C19.5 13.6 18.86 13 17.27 13H13.23C11.64 13 11 13.6 11 15.1V17.9C11 19.4 11.64 20 13.23 20H17.27C18.86 20 19.5 19.4 19.5 17.9Z" />
+      <path d="M9 4.9V2.1C9 0.6 8.36 0 6.77 0H2.73C1.14 0 0.5 0.6 0.5 2.1V4.9C0.5 6.4 1.14 7 2.73 7H6.77C8.36 7 9 6.4 9 4.9Z" />
+    </svg>
+  );
+}
+export function DetailsUserFillIcon({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none" className={`fill-${color}`}>
+      <path d="M14.19 0H5.81C2.17 0 0 2.17 0 5.81V14.19C0 17 1.29 18.93 3.56 19.66C4.22 19.89 4.98 20 5.81 20H14.19C15.02 20 15.78 19.89 16.44 19.66C18.71 18.93 20 17 20 14.19V5.81C20 2.17 17.83 0 14.19 0ZM18.5 14.19C18.5 16.33 17.66 17.68 15.97 18.24C15 16.33 12.7 14.97 10 14.97C7.3 14.97 5.01 16.32 4.03 18.24H4.02C2.35 17.7 1.5 16.34 1.5 14.2V5.81C1.5 2.99 2.99 1.5 5.81 1.5H14.19C17.01 1.5 18.5 2.99 18.5 5.81V14.19Z" />
+      <path d="M10.0019 6C8.02187 6 6.42188 7.6 6.42188 9.58C6.42188 11.56 8.02187 13.17 10.0019 13.17C11.9819 13.17 13.5819 11.56 13.5819 9.58C13.5819 7.6 11.9819 6 10.0019 6Z" />
+    </svg>
+  );
+}
+
+export function TicketDiscount({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 18" fill="none" className={`stroke-${color}`}>
+      <path
+        d="M18.5 9.5C18.5 8.12 19.62 7 21 7V6C21 2 20 1 16 1H6C2 1 1 2 1 6V6.5C2.38 6.5 3.5 7.62 3.5 9C3.5 10.38 2.38 11.5 1 11.5V12C1 16 2 17 6 17H16C20 17 21 16 21 12C19.62 12 18.5 10.88 18.5 9.5Z"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M8 11.75L14 5.75" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M13.9945 11.75H14.0035" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.99451 6.25H8.00349" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+export function TickCircleIcon({ size, color }) {
+  return (
+    <svg fill="none" width={size} height={size} viewBox="0 0 24 24" className="shrink-0 h-6 w-6">
+      <path
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  );
+}
+export function CloseCircleIcon({ size, color }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22" fill="none">
+      <path
+        stroke={color}
+        d="M11 21C16.5 21 21 16.5 21 11C21 5.5 16.5 1 11 1C5.5 1 1 5.5 1 11C1 16.5 5.5 21 11 21Z"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        stroke={color}
+        d="M8.16998 13.83L13.83 8.17004"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        stroke={color}
+        d="M13.83 13.83L8.16998 8.17004"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

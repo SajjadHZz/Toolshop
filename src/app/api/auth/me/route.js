@@ -11,7 +11,7 @@ export async function GET() {
       return Response.json({ message: "You are't loggined" }, { status: 401 });
     }
 
-    const user = await UserModel.findOne({ email: tokenPayload.email }, "email");
+    const user = await UserModel.findOne({ email: tokenPayload.email }, "email username");
 
     return Response.json(user, { status: 200 });
   } catch (err) {

@@ -1,12 +1,22 @@
-export default function OrderBox({ img, name, price, count }) {
+import { TicketDiscount } from "../Svgs/Svgs";
+
+export default function OrderBox({ img, name, price, count, discount }) {
   return (
-    <div className="border border-solid border-text/20 w-fit p-4 rounded-3xl">
-      <img src={img} alt="" className="w-52 mx-auto mb-4" />
-      <p className="w-60 text-justify mb-4">{name}</p>
-      <p className="text-sm">
-        <span>{count.toLocaleString("fa")} عدد</span>
-        <span>به قیمت {price.toLocaleString("fa")} تومان</span>
-      </p>
-    </div>
+    <>
+      <img src={img} alt="Image-Product" className="w-20 mask mask-squircle" />
+      <div>
+        <p className=" text-sm text-justify mb-4">{name}</p>
+        <p className="text-xs mb-2">
+          <span>{count.toLocaleString("fa")} عدد</span>
+          <span> به قیمت {price.toLocaleString("fa")} تومان</span>
+        </p>
+        {!!discount && (
+          <p className="text-xs text-error badge">
+            <TicketDiscount size="10" color="error" />
+            <span className="mr-1">شامل {discount.toLocaleString("fa")} تومان تخفیف</span>
+          </p>
+        )}
+      </div>
+    </>
   );
 }

@@ -1,5 +1,7 @@
-import { discountCalculate } from "@/utils/calculates";
+import { CloseCircleIcon, TickCircleIcon } from "@/components/modules/Svgs/Svgs";
+import { ToastAlert } from "@/utils/sort";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 export const addProductToUserFavorite = createAsyncThunk(
   "Favorite/addProductToUserFavorite",
@@ -12,8 +14,31 @@ export const addProductToUserFavorite = createAsyncThunk(
       body: JSON.stringify({ productId }),
     });
     if (set.status === 200) {
+      toast.custom((t) => (
+        <ToastAlert
+          title="محصول با موفقیت به علاقه‌مندی ها اضافه شد"
+          status="success"
+          icon={<TickCircleIcon size="20" color="white" />}
+        />
+      ));
       const res = await fetch(url);
       return await res.json();
+    } else if (set.status === 300) {
+      toast.custom((t) => (
+        <ToastAlert
+          title="این محصول از قبل در علاقه‌مندی ها ثبت شده"
+          status="error"
+          icon={<CloseCircleIcon size="20" color="white" />}
+        />
+      ));
+    } else if (set.status === 500) {
+      toast.custom((t) => (
+        <ToastAlert
+          title="سرور با مشکل مواجه شده. لطفا بعدا تلاش کنید"
+          status="error"
+          icon={<CloseCircleIcon size="20" color="white" />}
+        />
+      ));
     }
   }
 );
@@ -29,7 +54,22 @@ export const deleteProductFromUserFavorite = createAsyncThunk(
       body: JSON.stringify({ productId }),
     });
     if (res.status === 200) {
+      toast.custom((t) => (
+        <ToastAlert
+          title="محصول با موفقیت حذف شد"
+          status="success"
+          icon={<TickCircleIcon size="20" color="white" />}
+        />
+      ));
       return await res.json();
+    } else {
+      toast.custom((t) => (
+        <ToastAlert
+          title="سرور با مشکل مواجه شده. لطفا بعدا تلاش کنید"
+          status="error"
+          icon={<CloseCircleIcon size="20" color="white" />}
+        />
+      ));
     }
   }
 );
@@ -59,12 +99,34 @@ const slice = createSlice({
       const isDuplicateProduct = state.some((item) => item._id === action.payload._id);
       if (!isDuplicateProduct) {
         state.push(action.payload);
+        toast.custom((t) => (
+          <ToastAlert
+            title="محصول با موفقیت به علاقه‌مندی ها اضافه شد"
+            status="success"
+            icon={<TickCircleIcon size="20" color="white" />}
+          />
+        ));
         window.localStorage.setItem("favorites", JSON.stringify(state));
+      } else {
+        toast.custom((t) => (
+          <ToastAlert
+            title="این محصول از قبل در علاقه‌مندی ها ثبت شده"
+            status="error"
+            icon={<CloseCircleIcon size="20" color="white" />}
+          />
+        ));
       }
     },
     deleteFavoriteInLocalStorage: (state, action) => {
       const newBasket = state.filter((item) => item._id !== action.payload);
       state = newBasket;
+      toast.custom((t) => (
+        <ToastAlert
+          title="محصول با موفقیت از علاقه‌مندی ها حذف شد"
+          status="success"
+          icon={<TickCircleIcon size="20" color="white" />}
+        />
+      ));
       window.localStorage.setItem("favorites", JSON.stringify(state));
     },
   },

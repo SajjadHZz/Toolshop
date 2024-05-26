@@ -35,7 +35,7 @@ const questionsLink = [
   {
     id: "4",
     title: "روند ارسال سفارش",
-    icon: <ShoppingCartFill />,
+    icon: <ShoppingCartFill size="50" color="black" />,
     path: "/frequently-questions",
     borderClass: "border-l border-t",
   },

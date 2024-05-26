@@ -9,7 +9,7 @@ import {
 } from "@/components/modules/Svgs/Svgs";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { getUserAuth, signinUserToServer } from "@/redux/User";
+import { getUserAuth, signinUserToServer, signoutUserFromServer } from "@/redux/User";
 
 const menuList = [
   { id: 1, title: "داشبورد", icon: <DashboardIcon size="22" />, path: "/my-account" },
@@ -36,13 +36,19 @@ export default function UserPanelNav() {
     dispatch(signinUserToServer({ url: "http://localhost:3000/api/auth/signin", email, password, basket }));
   }
 
+  function signoutUserHandler() {
+    dispatch(signoutUserFromServer("http://localhost:3000/api/auth/signout"));
+  }
+
   return (
     <>
-      {user.email ? (
+      {user.loading ? (
+        <div className="btn bg-gray-100 skeleton w-28 rounded-full"></div>
+      ) : user.email ? (
         <div className="dropdown">
           <button
             tabIndex={0}
-            className="group btn btn-outline btn-primary border-text/20 rounded-full font-IranSans text-xs font-light"
+            className="group btn btn-outline btn-primary border-text/20 rounded-full font-IranSans text-xs font-light min-w-28"
           >
             <svg
               width="22"
@@ -70,7 +76,7 @@ export default function UserPanelNav() {
                 strokeLinejoin="round"
               />
             </svg>
-            {user.email.split("@")[0]}
+            {user.username}
           </button>
           <ul tabIndex={0} className="dropdown-content w-52 rounded-xl z-[1] menu p-2 shadow bg-base-100 ">
             {menuList.map((item) => {
@@ -84,7 +90,7 @@ export default function UserPanelNav() {
               );
             })}
             <li>
-              <div className="stroke-error text-error">
+              <div onClick={signoutUserHandler} className="stroke-error text-error cursor-pointer">
                 <LogoutIcon />
                 خروج از حساب
               </div>
@@ -127,25 +133,30 @@ export default function UserPanelNav() {
             ورود | عضویت
           </button>
           <div tabIndex={0} className="dropdown-content z-[1] menu p-4 shadow bg-base-100 rounded-box w-80">
-            <div className="px-2 pb-4 flex justify-between items-center">
+            <div className="px-2 pb-2 flex justify-between items-center">
               <p className="text-2xl font-Lalezar">ورود</p>
-              <label htmlFor="signin-modal" className="text-xs text-primary cursor-pointer">
+              <label
+                htmlFor="signin-modal"
+                className="text-xs text-primary badge hover:badge-primary cursor-pointer"
+              >
                 ساخت اکانت کاربری
               </label>
             </div>
             <hr />
             <form onSubmit={loginHandler} className="px-2 pt-4">
               <label htmlFor="signup-email" className="font-medium text-sm">
-                ایمیل / شماره موبایل :
+                ایمیل :
               </label>
               <input
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
-                type="text"
+                type="email"
                 id="signup-email"
                 dir="ltr"
+                inputMode="email"
+                required
                 placeholder="example@gmail.com : مثال"
-                className="my-4 block w-full rounded-full px-4 py-3 bg-secondary border border-black/20 border-solid focus:outline-primary focus:bg-background placeholder:text-right"
+                className="mb-4 mt-2 block w-full rounded-full px-4 py-3 bg-secondary border invalid:text-error invalid:bg-error/20 border-black/20 border-solid focus:outline-primary focus:bg-background placeholder:text-right"
               />
 
               <label htmlFor="signup-password" className="font-medium text-sm">
@@ -158,16 +169,14 @@ export default function UserPanelNav() {
                 id="signup-password"
                 dir="ltr"
                 placeholder="رمز عبور"
-                className="mt-4 mb-1 block w-full rounded-full px-4 py-3 bg-secondary border border-black/20 border-solid focus:outline-primary focus:bg-background placeholder:text-right"
+                required
+                className="mt-2 mb-1 block w-full rounded-full px-4 py-3 invalid:text-error invalid:bg-error/20 bg-secondary border border-black/20 border-solid focus:outline-primary focus:bg-background placeholder:text-right"
               />
-              <a href="#" className="text-xs text-primary">
+              <a href="#" className="text-xs text-primary mr-4">
                 فراموشی رمز عبور
               </a>
 
-              <button
-                type="submit"
-                className="btn btn-block border-none mt-4 bg-accent rounded-full hover:bg-accent-active"
-              >
+              <button type="submit" className="btn btn-block mt-4 btn-accent rounded-full">
                 ورود
               </button>
             </form>

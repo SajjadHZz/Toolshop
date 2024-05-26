@@ -2,11 +2,11 @@
 import Breadcrumbs from "@/components/modules/Breadcrumbs/Breadcrumbs";
 import ProductsSlider from "@/components/modules/ProductsSlider/ProductsSlider";
 import { ArrowLeft, BagHappy, MoneyIcon, TickCircle } from "@/components/modules/Svgs/Svgs";
-import { updateProductInLocalStorage, updateProductInUserBasket } from "@/redux/Basket";
-import { discountCalculate, discountPercentageCalculate, sumDiscountCalculate } from "@/utils/calculates";
-import Link from "next/link";
+import { addProductToUserOrders } from "@/redux/Orders";
+import { discountCalculate, sumDiscountCalculate } from "@/utils/calculates";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 const breadcrumbPath = [
   { title: "خانه", href: "/" },
   { title: "سبد خرید", href: "/basket" },
@@ -16,31 +16,118 @@ const breadcrumbPath = [
 export default function Basket() {
   const basket = useSelector((state) => state.basket);
   const user = useSelector((state) => state.user);
+  const router = useRouter();
+  useEffect(() => {
+    if (!user.email && !user.loading) {
+      router.replace("/");
+    }
+  }, [user]);
   const dispatch = useDispatch();
 
-  const [stateList, setStateList] = useState([]);
-  const [citiesList, setcitiesList] = useState([]);
-  const [userState, setUserState] = useState("");
-  const [userCity, setUserCity] = useState("");
   const deliveryPrice = basket.sumPrice >= 5_000_000 ? 0 : 80_000;
+
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [numberPhone, setNumberPhone] = useState("");
+  const [state, setState] = useState("");
+  const [city, setCity] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [address, setAddress] = useState("");
+  const [nationalityCode, setNationalityCode] = useState("");
+  const [landline, setLandline] = useState("");
+  const [numberCard, setNumberCard] = useState("");
+  const [shabaCard, setShabaCard] = useState("");
+  const [company, setCompany] = useState("");
+  const [job, setJob] = useState("");
+
+  const [stateList, setStateList] = useState([]);
+  const [citiesList, setCitiesList] = useState([]);
 
   useEffect(() => {
     fetchStates();
+    fetchUserInfos();
   }, []);
   useEffect(() => {
     fetchCities();
-  }, [userState]);
+  }, [state]);
 
-  async function fetchStates() {
-    const res = await fetch("https://iran-locations-api.ir/api/v1/fa/states");
+  async function fetchUserInfos() {
+    const res = await fetch("http://localhost:3000/api/user-infos");
     if (res.status === 200) {
-      setStateList(await res.json());
+      const data = await res.json();
+      setFirstname(data?.firstname || "");
+      setLastname(data?.lastname || "");
+      setNumberPhone(data?.numberPhone || "");
+      setState(data?.state || "");
+      setCity(data?.city || "");
+      setPostalCode(data?.postalCode || "");
+      setAddress(data?.address || "");
+      setNationalityCode(data?.nationalityCode || "");
+      setLandline(data?.landline || "");
+      setNumberCard(data?.numberCard || "");
+      setShabaCard(data?.shabaCard || "");
+      setCompany(data?.company || "");
+      setJob(data?.job || "");
+    }
+  }
+  async function fetchStates() {
+    if (navigator.onLine) {
+      const res = await fetch("https://iran-locations-api.ir/api/v1/fa/states");
+      if (res.status === 200) {
+        setStateList(await res.json());
+      }
     }
   }
   async function fetchCities() {
-    const res = await fetch(`https://iran-locations-api.ir/api/v1/fa/cities?state=${userState}`);
+    if (navigator.onLine) {
+      const res = await fetch(`https://iran-locations-api.ir/api/v1/fa/cities?state=${state}`);
+      if (res.status === 200) {
+        setCitiesList(await res.json());
+      }
+    }
+  }
+
+  async function setUserDatas() {
+    const reqBody = {
+      firstname,
+      lastname,
+      state,
+      city,
+      address,
+      postalCode,
+      numberPhone,
+      landline,
+      nationalityCode,
+      numberCard,
+      shabaCard,
+      job,
+      company,
+      postalCode,
+    };
+    const res = await fetch("http://localhost:3000/api/user-infos", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(reqBody),
+    });
     if (res.status === 200) {
-      setcitiesList(await res.json());
+      const list = basket.list.map((item) => {
+        const price =
+          item.count >= item.product.wholesale.number ? item.product.wholesale.price : item.product.price;
+        const discount = (item.product.price - discountCalculate(price, item.product.discount)) * item.count;
+        return {
+          count: item.count,
+          price,
+          img: item.product.img[0],
+          name: item.product.name,
+          discount,
+        };
+      });
+      dispatch(
+        addProductToUserOrders({ url: "http://localhost:3000/api/orders", sumPrice: basket.sumPrice, list })
+      );
+      router.push("/my-account");
     }
   }
 
@@ -52,7 +139,7 @@ export default function Basket() {
         </div>
         <h1 className="font-Lalezar text-6xl text-center mb-8">تسویه حساب</h1>
         <p className="mx-auto text-center">
-          مشتری گرامی ، در صورتی که خرید شما به مبلغ 5,000,000 میلیون تومان و وزن محصول کمتر از (30 کیلوگرم)
+          مشتری گرامی ، در صورتی که خرید شما به مبلغ ۵,۰۰۰,۰۰۰ میلیون تومان و وزن محصول کمتر از (۳۰ کیلوگرم)
           باشد حمل و نقل شما رایگان میباشد.
         </p>
       </div>
@@ -84,7 +171,14 @@ export default function Basket() {
                 <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
                   نام <span className="text-error">*</span>
                 </p>
-                <input id="نام" type="text" className="bg-transparent border-none outline-none" />
+                <input
+                  id="نام"
+                  placeholder="نام ..."
+                  type="text"
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setFirstname(e.target.value)}
+                  value={firstname}
+                />
               </label>
               <label
                 htmlFor="نام خانوادگی"
@@ -93,16 +187,30 @@ export default function Basket() {
                 <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
                   نام خانوادگی <span className="text-error">*</span>
                 </p>
-                <input id="نام خانوادگی" type="text" className="bg-transparent border-none outline-none" />
+                <input
+                  id="نام خانوادگی"
+                  type="text"
+                  placeholder="نام خانوادگی ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setLastname(e.target.value)}
+                  value={lastname}
+                />
               </label>
               <label
-                htmlFor="شماره موبایل"
+                htmlFor="شماره همراه"
                 className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
               >
                 <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
-                  شماره موبایل <span className="text-error">*</span>
+                  شماره همراه <span className="text-error">*</span>
                 </p>
-                <input id="شماره موبایل" type="text" className="bg-transparent border-none outline-none" />
+                <input
+                  id="شماره همراه"
+                  type="text"
+                  placeholder="شماره همراه ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setNumberPhone(e.target.value)}
+                  value={numberPhone}
+                />
               </label>
               <label
                 htmlFor="استان"
@@ -114,10 +222,11 @@ export default function Basket() {
                 <input
                   id="استان"
                   list="state"
+                  placeholder="استان ..."
                   type="text"
                   className="bg-transparent border-none outline-none w-full"
-                  onChange={(e) => setUserState(e.target.value)}
-                  value={userState}
+                  onChange={(e) => setState(e.target.value)}
+                  value={state}
                 />
                 <datalist
                   onChange={() => console.log("object")}
@@ -139,10 +248,11 @@ export default function Basket() {
                 <input
                   id="شهر"
                   list="city"
+                  placeholder="شهر ..."
                   type="text"
                   className="bg-transparent border-none outline-none w-full"
-                  onChange={(e) => setUserCity(e.target.value)}
-                  value={userCity}
+                  onChange={(e) => setCity(e.target.value)}
+                  value={city}
                 />
                 <datalist id="city" className="w-full appearance-none">
                   {citiesList.map((item, index) => (
@@ -164,9 +274,10 @@ export default function Basket() {
                 <input
                   id="کدپستی"
                   type="text"
+                  placeholder="کدپستی ..."
                   className="bg-transparent border-none outline-none w-full"
-                  // onChange={(e) => setUserCity(e.target.value)}
-                  // value={userCity}
+                  onChange={(e) => setPostalCode(e.target.value)}
+                  value={postalCode}
                 />
               </label>
               <label
@@ -179,9 +290,100 @@ export default function Basket() {
                 <input
                   id="آدرس"
                   type="text"
+                  placeholder="آدرس ..."
                   className="bg-transparent border-none outline-none w-full"
-                  // onChange={(e) => setUserCity(e.target.value)}
-                  // value={userCity}
+                  onChange={(e) => setAddress(e.target.value)}
+                  value={address}
+                />
+              </label>
+              <label
+                htmlFor="کد ملی"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+              >
+                <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">کد ملی</p>
+                <input
+                  id="کد ملی"
+                  type="text"
+                  placeholder="کد ملی ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setNationalityCode(e.target.value)}
+                  value={nationalityCode}
+                />
+              </label>
+              <label
+                htmlFor="شماره ثابت"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+              >
+                <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">شماره ثابت</p>
+                <input
+                  id="شماره ثابت"
+                  type="text"
+                  placeholder="شماره ثابت ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setLandline(e.target.value)}
+                  value={landline}
+                />
+              </label>
+              <label
+                htmlFor="شماره کارت بانکی (جهت عودت وجه)"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+              >
+                <p className="text-xs absolute -top-3 right-4 bg-background px-2 rounded">
+                  شماره کارت بانکی (جهت عودت وجه)
+                </p>
+                <input
+                  id="شماره کارت بانکی (جهت عودت وجه)"
+                  type="text"
+                  placeholder="شماره کارت بانکی ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setNumberCard(e.target.value)}
+                  value={numberCard}
+                />
+              </label>
+              <label
+                htmlFor="شماره شبا (جهت عودت وجه)"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+              >
+                <p className="text-xs absolute -top-3 right-4 bg-background px-2 rounded">
+                  شماره شبا (جهت عودت وجه)
+                </p>
+                <input
+                  id="شماره شبا (جهت عودت وجه)"
+                  type="text"
+                  placeholder="شماره شبا ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setShabaCard(e.target.value)}
+                  value={shabaCard}
+                />
+              </label>
+              <label
+                htmlFor="نام شرکت یا فروشگاه"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+              >
+                <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
+                  نام شرکت یا فروشگاه
+                </p>
+                <input
+                  id="نام شرکت یا فروشگاه"
+                  type="text"
+                  placeholder="نام شرکت یا فروشگاه ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setCompany(e.target.value)}
+                  value={company}
+                />
+              </label>
+              <label
+                htmlFor="شغل شما"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+              >
+                <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">شغل شما</p>
+                <input
+                  id="شغل شما"
+                  type="text"
+                  placeholder="شغل شما ..."
+                  className="bg-transparent border-none outline-none"
+                  onChange={(e) => setJob(e.target.value)}
+                  value={job}
                 />
               </label>
             </div>
@@ -198,7 +400,7 @@ export default function Basket() {
                   ? item.product.wholesale.price
                   : item.product.price;
               return (
-                <div className="flex justify-between items-center mb-4">
+                <div key={item._id} className="flex justify-between items-center mb-4">
                   <p>
                     <span className="text-xs">{item.product.name}</span>
                     <span className="text-xs mx-2 inline-block">
@@ -243,6 +445,7 @@ export default function Basket() {
           </p>
           <button
             type="button"
+            onClick={setUserDatas}
             className={`btn btn-block btn-primary rounded-full ${basket.list.length || "btn-disabled"}`}
           >
             ثبت سفارش
@@ -254,50 +457,5 @@ export default function Basket() {
       <br />
       <ProductsSlider title="محصولات مرتبط" />
     </>
-  );
-}
-
-function Counter({ productId, price, count, wholesale, wholeNum }) {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-  const [counter, setCounter] = useState(count);
-
-  function updateCounter(number) {
-    if (user.email) {
-      dispatch(
-        updateProductInUserBasket({ url: "http://localhost:3000/api/basket", productId, counter: number })
-      );
-    } else {
-      dispatch(updateProductInLocalStorage({ productId, count: number }));
-    }
-  }
-  return (
-    <div dir="ltr" className="join">
-      <button
-        onClick={() => {
-          setCounter((prev) => prev + 1);
-          const number = counter + 1;
-          updateCounter(number);
-        }}
-        className="btn btn-xs btn-outline btn-primary join-item rounded-l-full"
-      >
-        +
-      </button>
-      <button className="join-item border border-solid border-primary text-xs w-8">
-        {counter.toLocaleString("fa")}
-      </button>
-      <button
-        onClick={() => {
-          if (counter > 1) {
-            setCounter((prev) => prev - 1);
-            const number = counter - 1;
-            updateCounter(number);
-          }
-        }}
-        className="btn btn-xs btn-outline btn-primary join-item rounded-r-full"
-      >
-        -
-      </button>
-    </div>
   );
 }

@@ -34,8 +34,3 @@
     background-color: #ffdd00;
   }
 }
-@layer components {
-  .test {
-    @apply border-x border-l border-r;
-  }
-}

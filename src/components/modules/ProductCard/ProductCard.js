@@ -4,7 +4,7 @@ import Link from "next/link";
 import { addProductToLocalStorage, addProductToUserBasket } from "@/redux/Basket";
 import { quicklyAccessProduct } from "@/redux/QuicklyAccess";
 import { discountCalculate } from "@/utils/calculates";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addFavoriteToLocalStorage, addProductToUserFavorite } from "@/redux/Favorite";
 
@@ -53,7 +53,7 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
   }
 
   return (
-    <>
+    <Suspense fallback={<Loading />}>
       <div className="relative group">
         {isShowWholesaleNumber && (
           <div className="absolute top-2 left-2 text-xs badge badge-primary animate-fade-in">
@@ -104,7 +104,9 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
       </div>
       <div className="p-4">
         <p className="text-sm h-10 leading-normal text-justify font-bold">
-          <Link href={`/products/${name}`}>{name}</Link>
+          <Link href={`/products/${name}`} scroll={true}>
+            {name}
+          </Link>
         </p>
 
         <div className="join w-full my-4">
@@ -208,6 +210,29 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
           strokeLinejoin="round"
         />
       </svg>
-    </>
+    </Suspense>
+  );
+}
+function Loading() {
+  return (
+    <div className="h-full overflow-hidden rounded-xl bg-gray-200 animate-pulse shadow relative">
+      <div className="relative group ">
+        <div className="w-full h-72"></div>
+        <div className="absolute top-0 left-0 w-full h-full opacity-50 bg-black/40 rounded-xl transition-opacity group-hover:opacity-100"></div>
+      </div>
+      <div className="p-4">
+        <div className="w-full h-4 leading-normal bg-gray-300 rounded-full"></div>
+        <div className="join w-full my-4">
+          <div className="join-item flex-1 btn px-0 bg-gray-200 font-normal"></div>
+          <div className="join-item flex-1 btn px-0 bg-gray-200 font-normal"></div>
+        </div>
+        <div className="flex items-center gap-4 mb-2">
+          <span className="bg-gray-300 w-1/2 h-2 inline-block rounded-sm"></span>
+          <span className="w-6 h-4 inline-block rounded-full bg-gray-300 mx-2"></span>
+        </div>
+        <p className="w-10 h-2 bg-gray-300 block rounded-sm"></p>
+      </div>
+      <span className="w-10 h-10 absolute left-0 bottom-0 inline-block bg-gray-300 rounded-tr-xl"></span>
+    </div>
   );
 }

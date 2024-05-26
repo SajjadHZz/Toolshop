@@ -64,19 +64,29 @@ function Footer() {
 
         <ul className="text-text bg-background flex justify-center items-center py-4 rounded-xl divide-x divide-solid divide-black/20 divide-x-reverse">
           <li className="px-4 cursor-pointer transition-colors hover:text-primary">
-            <Link href="/">خانه</Link>
+            <Link scroll={true} href="/">
+              خانه
+            </Link>
           </li>
           <li className="px-4 cursor-pointer transition-colors hover:text-primary">
-            <Link href="/about">درباره ما</Link>
+            <Link scroll={true} href="/about">
+              درباره ما
+            </Link>
           </li>
           <li className="px-4 cursor-pointer transition-colors hover:text-primary">
-            <Link href="/contact-us">تماس با ما</Link>
+            <Link scroll={true} href="/contact-us">
+              تماس با ما
+            </Link>
           </li>
           <li className="px-4 cursor-pointer transition-colors hover:text-primary">
-            <Link href="/frequently-questions">سوالات متداول</Link>
+            <Link scroll={true} href="/frequently-questions">
+              سوالات متداول
+            </Link>
           </li>
           <li className="px-4 cursor-pointer transition-colors hover:text-primary">
-            <Link href="/privacy-policy">سیاست حفظ حریم خصوصی</Link>
+            <Link scroll={true} href="/privacy-policy">
+              سیاست حفظ حریم خصوصی
+            </Link>
           </li>
         </ul>
 

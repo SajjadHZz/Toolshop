@@ -28,19 +28,15 @@ export async function PUT(req) {
       return Response.json({ message: "You are't loggined" }, { status: 401 });
     }
 
-    const { productId } = await req.json();
+    const { sumPrice, list } = await req.json();
 
-    const user = await UserModel.findOne({ email: tokenPayload.email }, "favorites");
+    const user = await UserModel.findOne({ email: tokenPayload.email }, "orders");
 
-    const isDuplicateProduct = user.favorites.some((item) => item.toString() === productId);
-    if (isDuplicateProduct) {
-      return Response.json({ message: "Multiple Product In Your Favorite List" }, { status: 300 });
-    }
-
-    user.favorites.push(productId);
+    user.orders.current.sumPrice += sumPrice;
+    user.orders.current.list.push(...list);
     user.save();
 
-    return Response.json(user.favorites, { status: 200 });
+    return Response.json(user.orders, { status: 200 });
   } catch (err) {
     return Response.json({ message: `${err}` }, { status: 500 });
   }

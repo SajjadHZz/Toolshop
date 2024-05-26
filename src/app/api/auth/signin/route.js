@@ -7,20 +7,22 @@ export async function POST(req) {
     connectToDB();
     const { email, password, basket } = await req.json();
 
-    const user = await UserModel.findOne({ email }, "email");
+    const user = await UserModel.findOne({ email }, "email password basket");
 
     if (!user) {
       return Response.json({ message: "Email or Password is not currect !" }, { status: 404 });
     }
 
-    const isValidPassword = verifyPassword(password, user.password);
+    const isValidPassword = await verifyPassword(password, user.password);
     if (!isValidPassword) {
       return Response.json({ message: "Email or Password is not currect !" }, { status: 422 });
     }
 
     const token = generateToken({ email: user.email });
-    user.basket = basket;
-    user.save();
+    if (!user.basket.list.length) {
+      user.basket = basket;
+      user.save();
+    }
 
     return Response.json(user, {
       status: 200,

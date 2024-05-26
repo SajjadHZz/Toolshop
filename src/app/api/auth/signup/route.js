@@ -7,7 +7,7 @@ export async function POST(req) {
   try {
     const { email, password, basket, checked } = await req.json();
 
-    const isUserValid = await UserModel.findOne({ email });
+    const isUserValid = await UserModel.findOne({ email }, "email");
 
     if (isUserValid) {
       return Response.json({ message: "Email Already Exist !" }, { status: 422 });
@@ -18,10 +18,11 @@ export async function POST(req) {
       email,
       password: hashedPassword,
       basket,
+      username: email.split("@")[0],
     });
     return Response.json(
       { message: "Loggin User Successfully :)" },
-      { status: 201, headers: { "Set-Cookie": checked ? `token=${token};path=/;httpOnly=true` : "" } }
+      { status: 201, headers: { "Set-Cookie": `token=${token};path=/;httpOnly=true` } }
     );
   } catch (err) {
     return Response.json({ message: `Server Internal Error: ${err}` }, { status: 500 });

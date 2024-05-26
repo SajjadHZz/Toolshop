@@ -1,6 +1,7 @@
 "use client";
 
 import FavoriteBox from "@/components/modules/FavoriteBox/FavoriteBox";
+import { HeartFillIcon } from "@/components/modules/Svgs/Svgs";
 import { getProductFromUserFavorite } from "@/redux/Favorite";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,8 +19,11 @@ export default function Favorites() {
   }, [favorites]);
 
   return (
-    <div className="bg-background flex-1 w-2/3 relative">
-      <h3 className="text-4xl font-Lalezar m-4">علاقه‌مندی ها</h3>
+    <div className="bg-background flex-1 w-2/3 relative rounded-3xl">
+      <h3 className="text-4xl font-Lalezar m-4 flex gap-4 items-center">
+        <HeartFillIcon size="30" color="primary" />
+        لیست علاقه‌مندی ها
+      </h3>
       <hr />
       <div className="p-2">
         {isLoading ? (

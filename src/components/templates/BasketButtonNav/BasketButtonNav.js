@@ -8,10 +8,11 @@ import {
 } from "@/redux/Basket";
 import { discountCalculate } from "@/utils/calculates";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function BasketButtonNav() {
+  const inputNavBasket = useRef();
   const basket = useSelector((state) => state.basket);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -34,9 +35,13 @@ export default function BasketButtonNav() {
     };
   }
 
+  function basketButtonHandler() {
+    inputNavBasket.current.checked = false;
+  }
+
   return (
     <div className="drawer w-fit">
-      <input id="nav-basket" type="checkbox" className="drawer-toggle" />
+      <input ref={inputNavBasket} id="nav-basket" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content">
         {/* Page content here */}
         <label
@@ -139,13 +144,19 @@ export default function BasketButtonNav() {
             </p>
             <Link
               href="/basket"
+              scroll={true}
+              onClick={basketButtonHandler}
               className={`btn btn-block btn-accent rounded-full my-1 ${basket.list.length || "btn-disabled"}`}
             >
               مشاهده سبد خرید
             </Link>
             <Link
               href="/payment"
-              className={`btn btn-block btn-accent rounded-full my-1 ${basket.list.length || "btn-disabled"}`}
+              scroll={true}
+              onClick={basketButtonHandler}
+              className={`btn btn-block btn-accent rounded-full my-1 ${
+                (basket.list.length && user.email) || "btn-disabled"
+              }`}
             >
               تسویه حساب
             </Link>
