@@ -20,11 +20,11 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
   }
 
   function addToBasketHandler() {
-    const count = isShowWholesaleNumber ? wholesale.number : 1;
+    const count = isShowWholesaleNumber ? wholesale?.number : 1;
     if (user.email) {
       dispatch(
         addProductToUserBasket({
-          url: "http://localhost:3000/api/basket",
+          url: "/api/basket",
           productId: _id,
           count,
         })
@@ -43,7 +43,7 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
     if (user.email) {
       dispatch(
         addProductToUserFavorite({
-          url: "http://localhost:3000/api/favorite",
+          url: "/api/favorite",
           productId: _id,
         })
       );
@@ -115,7 +115,11 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
               setProductPrice(price);
               setIsShowWholesaleNumber(false);
             }}
-            className="join-item flex-1 btn px-0 bg-secondary font-normal"
+            className={
+              !!+wholesale.price
+                ? "join-item flex-1 btn px-0 bg-secondary font-normal"
+                : "flex-1 btn px-0 bg-secondary font-normal"
+            }
             type="radio"
             name={rendomUniqueId}
             aria-label="قیمت تک"
@@ -135,22 +139,24 @@ export default function ProductCard({ _id, img, name, price, wholesale, discount
           )}
         </div>
 
-        {discount !== 0 && (
-          <div>
-            <del className="text-black/40 text-sm">
-              {productPrice.toLocaleString("fa")}
-              تومان
-            </del>
-            <span className="badge text-xs font-bold bg-accent border-none mx-2">
-              {discount.toLocaleString("fa")}%
-            </span>
-          </div>
-        )}
+        <div className="h-12">
+          {discount !== 0 && (
+            <div>
+              <del className="text-black/40 text-sm">
+                {productPrice.toLocaleString("fa")}
+                تومان
+              </del>
+              <span className="badge text-xs font-bold bg-accent border-none mx-2">
+                {discount.toLocaleString("fa")}%
+              </span>
+            </div>
+          )}
 
-        <p className="font-bold">
-          {discountCalculate(productPrice, discount).toLocaleString("fa")}
-          تومان
-        </p>
+          <p className="font-bold">
+            {discountCalculate(productPrice, discount).toLocaleString("fa")}
+            تومان
+          </p>
+        </div>
       </div>
 
       <svg

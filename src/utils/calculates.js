@@ -9,7 +9,10 @@ export function discountCalculate(price, discount) {
 export function sumDiscountCalculate(basket) {
   let sumDiscountPrice = 0;
   basket.list.forEach((item) => {
-    if (item.count >= item.product.wholesale.number || item.product.discount) {
+    if (
+      (item.count >= item.product.wholesale.number && item.product.wholesale.price < item.product.price) ||
+      item.product.discount
+    ) {
       const diffrencePrice =
         (item.product.price -
           discountCalculate(
@@ -24,5 +27,8 @@ export function sumDiscountCalculate(basket) {
 }
 
 export function discountPercentageCalculate(initialPrice, finalPrice) {
-  return Math.floor(((initialPrice - finalPrice) / initialPrice) * 100);
+  if (initialPrice <= finalPrice) {
+    return 0;
+  }
+  return Math.floor(((initialPrice - finalPrice) / initialPrice) * 100) || 1;
 }

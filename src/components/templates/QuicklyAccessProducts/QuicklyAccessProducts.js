@@ -89,9 +89,11 @@ export default function QuicklyAccessProducts() {
               <div>
                 <h5 className="font-bold mb-2">ویژگی های محصول :</h5>
                 <ul className="list-disc text-text/60 mr-8 leading-loose text-sm">
-                  {product.attributes.slice(0, 3).map((attr, index) => (
-                    <li key={index}>{attr}</li>
-                  ))}
+                  {product.attributes.length ? (
+                    product.attributes.slice(0, 3).map((attr, index) => <li key={index}>{attr}</li>)
+                  ) : (
+                    <li>ویژگی برای محصول درج نشده است</li>
+                  )}
                 </ul>
               </div>
               <div className="flex justify-center items-center divide-x divide-solid divide-text/20 divide-x-reverse my-4 text-center bg-secondary rounded-xl p-4">
@@ -141,9 +143,7 @@ function Counter() {
 
   function productsToBasketHandler() {
     if (user.email) {
-      dispatch(
-        addProductToUserBasket({ url: "http://localhost:3000/api/basket", productId: _id, count: counter })
-      );
+      dispatch(addProductToUserBasket({ url: "/api/basket", productId: _id, count: counter }));
     } else {
       dispatch(
         addProductToLocalStorage({

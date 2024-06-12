@@ -7,7 +7,7 @@ import { Autoplay, Navigation } from "swiper/modules";
 
 export default function HomeCarousel() {
   return (
-    <div className="relative group">
+    <div className="relative group h-80 lg:h-96">
       <Swiper
         loop
         autoplay={{
@@ -20,11 +20,11 @@ export default function HomeCarousel() {
         }}
         slidesPerView={1}
         modules={[Autoplay, Navigation]}
-        className="mySwiper overflow-hidden rounded-3xl"
+        className="mySwiper w-full h-full overflow-hidden rounded-3xl"
       >
         <SwiperSlide>
           <Image
-            className="w-full h-full"
+            className="w-full h-full object-cover"
             src="/images/slider_1.jpg"
             alt="Slider-Image"
             width="1600"
@@ -34,7 +34,7 @@ export default function HomeCarousel() {
         </SwiperSlide>
         <SwiperSlide>
           <Image
-            className="w-full h-full"
+            className="w-full h-full object-cover"
             src="/images/slider_2.jpg"
             alt="Slider-Image"
             width="1600"
@@ -44,7 +44,7 @@ export default function HomeCarousel() {
         </SwiperSlide>
         <SwiperSlide>
           <Image
-            className="w-full h-full"
+            className="w-full h-full object-cover"
             src="/images/slider_3.jpg"
             alt="Slider-Image"
             width="1600"

@@ -1,12 +1,13 @@
 "use client";
 import {
+  deleteAllProductFromUserBasket,
   deleteProductFromUserBasket,
   deleteProductInLocalStorage,
   getProductFromUserBasket,
   updateProductInLocalStorage,
   updateProductInUserBasket,
 } from "@/redux/Basket";
-import { discountCalculate } from "@/utils/calculates";
+import { discountCalculate, discountPercentageCalculate } from "@/utils/calculates";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,7 +18,7 @@ export default function BasketButtonNav() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProductFromUserBasket("http://localhost:3000/api/basket"));
+    dispatch(getProductFromUserBasket("/api/basket"));
   }, []);
 
   function deleteHandler(product) {
@@ -25,7 +26,7 @@ export default function BasketButtonNav() {
       if (user.email) {
         dispatch(
           deleteProductFromUserBasket({
-            url: "http://localhost:3000/api/basket",
+            url: "/api/basket",
             productId: product.product._id,
           })
         );
@@ -47,7 +48,7 @@ export default function BasketButtonNav() {
         <label
           htmlFor="nav-basket"
           tabIndex={0}
-          className="relative group w-12 btn btn-outline btn-primary px-0 bg-background border-text/20 rounded-full font-IranSans text-xs font-light"
+          className="relative group btn-circle btn btn-outline btn-primary px-0 bg-background border-text/20 rounded-full font-IranSans text-xs font-light"
         >
           <svg
             className="stroke-primary group-hover:stroke-background"
@@ -55,7 +56,6 @@ export default function BasketButtonNav() {
             height="20"
             viewBox="0 0 31 32"
             fill="none"
-            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M11.3481 3.49625L6.73328 8.12381"
@@ -101,20 +101,53 @@ export default function BasketButtonNav() {
           <div className="flex-1 overflow-auto">
             {basket.list.length ? (
               basket.list.map((item) => {
+                if (!item.product) {
+                  dispatch(deleteAllProductFromUserBasket("/api/basket"));
+                }
+                const isWholesale =
+                  item.count >= item.product?.wholesale.number &&
+                  item.product.wholesale.price < item.product.price;
                 return (
                   <div
-                    key={item.product._id}
+                    key={"basket_products_" + item.product?._id}
                     className="flex items-stretch gap-2 p-2 transition-colors hover:bg-secondary relative"
                   >
-                    <img src={item.product.img[0]} alt="" className="w-24 mask mask-squircle" />
-                    <div className="flex flex-col justify-between items-start">
-                      <h5 className="text-sm">{item.product.name}</h5>
+                    <div className="w-24 relative">
+                      <img
+                        src={item.product?.img[0]}
+                        alt=""
+                        className="size-full object-cover mask mask-squircle"
+                      />
+                      {isWholesale && (
+                        <p className="mask mask-squircle absolute top-0 left-0 flex justify-center items-center w-full h-full bg-black/20 text-error font-bold">
+                          <span className="badge badge-accent">خرید عمده</span>
+                        </p>
+                      )}
+                      <div className="absolute top-0 right-0 flex gap-1">
+                        {!!item?.product?.discount && (
+                          <span className="badge badge-xs py-2 badge-primary ">
+                            {item?.product?.discount.toLocaleString("fa-ir")}%
+                          </span>
+                        )}
+                        {isWholesale && (
+                          <span className="badge badge-xs py-2 badge-accent">
+                            {discountPercentageCalculate(
+                              item?.product.price,
+                              item?.product.wholesale.price
+                            ).toLocaleString("fa-ir")}
+                            %
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-between items-start gap-2">
+                      <h5 className="text-sm">{item.product?.name}</h5>
                       <Counter
-                        count={item.count}
-                        productId={item.product._id}
-                        price={discountCalculate(item.product.price, item.product.discount)}
-                        wholesale={discountCalculate(item.product.wholesale.price, item.product.discount)}
-                        wholeNum={item.product.wholesale.number}
+                        count={item?.count}
+                        productId={item?.product?._id}
+                        price={discountCalculate(item.product?.price, item.product?.discount)}
+                        wholesale={discountCalculate(item.product?.wholesale.price, item.product?.discount)}
+                        wholeNum={item.product?.wholesale.number}
                       />
                     </div>
                     <svg
@@ -171,13 +204,13 @@ function Counter({ productId, price, count, wholesale, wholeNum }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [counter, setCounter] = useState(count);
-  const [productPrice, setProductPrice] = useState(wholeNum > counter ? price : wholesale);
+  const [productPrice, setProductPrice] = useState(
+    wholeNum ? (wholeNum > counter ? price : wholesale) : price
+  );
 
   function updateCounter(number) {
     if (user.email) {
-      dispatch(
-        updateProductInUserBasket({ url: "http://localhost:3000/api/basket", productId, counter: number })
-      );
+      dispatch(updateProductInUserBasket({ url: "/api/basket", productId, counter: number }));
     } else {
       dispatch(updateProductInLocalStorage({ productId, count: number }));
     }
@@ -216,7 +249,7 @@ function Counter({ productId, price, count, wholesale, wholeNum }) {
       </div>
       <p className="text-xs">
         <span className="align-middle mx-1">{count.toLocaleString("fa")} ✕</span>
-        <span>{productPrice.toLocaleString("fa")} تومان</span>
+        <span>{productPrice?.toLocaleString("fa")} تومان</span>
       </p>
     </>
   );

@@ -33,4 +33,8 @@
   *::-webkit-scrollbar-thumb:active {
     background-color: #ffdd00;
   }
+  .text-border-white {
+    text-shadow: 2px 0 #f7f8fb, -2px 0 #f7f8fb, 0 2px #f7f8fb, 0 -2px #f7f8fb, 1px 1px #f7f8fb,
+      -1px -1px #f7f8fb, 1px -1px #f7f8fb, -1px 1px #f7f8fb;
+  }
 }

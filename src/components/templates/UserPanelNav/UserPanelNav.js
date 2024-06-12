@@ -28,16 +28,16 @@ export default function UserPanelNav() {
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getUserAuth("http://localhost:3000/api/auth/me"));
+    dispatch(getUserAuth("/api/auth/me"));
   }, []);
 
   async function loginHandler(e) {
     e.preventDefault();
-    dispatch(signinUserToServer({ url: "http://localhost:3000/api/auth/signin", email, password, basket }));
+    dispatch(signinUserToServer({ url: "/api/auth/signin", email, password, basket }));
   }
 
   function signoutUserHandler() {
-    dispatch(signoutUserFromServer("http://localhost:3000/api/auth/signout"));
+    dispatch(signoutUserFromServer("/api/auth/signout"));
   }
 
   return (
@@ -48,7 +48,7 @@ export default function UserPanelNav() {
         <div className="dropdown">
           <button
             tabIndex={0}
-            className="group btn btn-outline btn-primary border-text/20 rounded-full font-IranSans text-xs font-light min-w-28"
+            className="group btn btn-outline btn-primary border-text/20 rounded-full font-IranSans text-xs font-light md:min-w-28"
           >
             <svg
               width="22"
@@ -76,12 +76,12 @@ export default function UserPanelNav() {
                 strokeLinejoin="round"
               />
             </svg>
-            {user.username}
+            <span className="hidden md:inline">{user.username}</span>
           </button>
           <ul tabIndex={0} className="dropdown-content w-52 rounded-xl z-[1] menu p-2 shadow bg-base-100 ">
             {menuList.map((item) => {
               return (
-                <li key={item.id}>
+                <li key={"menu_account_" + item.id}>
                   <Link href={item.path} className="stroke-primary">
                     {item.icon}
                     {item.title}
@@ -130,7 +130,7 @@ export default function UserPanelNav() {
                 strokeLinejoin="round"
               />
             </svg>
-            ورود | عضویت
+            <span className="hidden md:inline">ورود | عضویت</span>
           </button>
           <div tabIndex={0} className="dropdown-content z-[1] menu p-4 shadow bg-base-100 rounded-box w-80">
             <div className="px-2 pb-2 flex justify-between items-center">

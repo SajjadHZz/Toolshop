@@ -7,6 +7,7 @@ import { discountCalculate, sumDiscountCalculate } from "@/utils/calculates";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { deleteAllProductFromUserBasket } from "@/redux/Basket";
 const breadcrumbPath = [
   { title: "خانه", href: "/" },
   { title: "سبد خرید", href: "/basket" },
@@ -52,7 +53,7 @@ export default function Basket() {
   }, [state]);
 
   async function fetchUserInfos() {
-    const res = await fetch("http://localhost:3000/api/user-infos");
+    const res = await fetch("/api/user-infos");
     if (res.status === 200) {
       const data = await res.json();
       setFirstname(data?.firstname || "");
@@ -104,7 +105,7 @@ export default function Basket() {
       company,
       postalCode,
     };
-    const res = await fetch("http://localhost:3000/api/user-infos", {
+    const res = await fetch("/api/user-infos", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -124,9 +125,8 @@ export default function Basket() {
           discount,
         };
       });
-      dispatch(
-        addProductToUserOrders({ url: "http://localhost:3000/api/orders", sumPrice: basket.sumPrice, list })
-      );
+      dispatch(addProductToUserOrders({ url: "/api/orders", sumPrice: basket.sumPrice, list }));
+      dispatch(deleteAllProductFromUserBasket("/api/basket"));
       router.push("/my-account");
     }
   }
@@ -134,7 +134,7 @@ export default function Basket() {
   return (
     <>
       <div className="bg-gradient-to-b from-accent to-transparent py-10 relative mb-8">
-        <div className="absolute top-4 right-8">
+        <div className="absolute start-4 top-1 lg:top-4 lg:start-8">
           <Breadcrumbs path={breadcrumbPath} />
         </div>
         <h1 className="font-Lalezar text-6xl text-center mb-8">تسویه حساب</h1>
@@ -143,27 +143,27 @@ export default function Basket() {
           باشد حمل و نقل شما رایگان میباشد.
         </p>
       </div>
-      <div className="flex justify-between gap-4 mx-8 h-full">
-        <div className="w-full h-full">
-          <div className="flex justify-center items-center gap-4 bg-background p-4 rounded-3xl mb-4 border border-solid border-black">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-y-4 lg:gap-x-4 mx-2 lg:mx-8 h-full">
+        <div className="w-full h-full lg:col-span-2">
+          <div className="flex justify-center items-center gap-4 bg-background p-4 rounded-3xl mb-4 border border-solid border-black text-nowrap text-xs sm:text-sm">
             <p className="flex items-center gap-2">
               <BagHappy />
-              <span className="">سبد خرید</span>
+              <span>سبد خرید</span>
             </p>
             <ArrowLeft />
-            <p className="flex items-center gap-2">
+            <p className="flex items-center gap-2 scale-125 px-4">
               <MoneyIcon />
-              <span className="">تسویه حساب</span>
+              <span className="font-bold">تسویه حساب</span>
             </p>
             <ArrowLeft />
             <p className="flex items-center gap-2">
               <TickCircle />
-              <span className="">ثبت سفارش</span>
+              <span>ثبت سفارش</span>
             </p>
           </div>
-          <form className="bg-background rounded-3xl p-4 h-full min-h-[200px] border border-solid border-black">
+          <form className="bg-background rounded-3xl p-4 border border-solid border-black">
             <h4 className="mb-8 font-bold text-2xl">جزئیات صورت حساب :</h4>
-            <div className="grid grid-cols-3 gap-x-4 gap-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-8">
               <label
                 htmlFor="نام"
                 className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
@@ -282,7 +282,7 @@ export default function Basket() {
               </label>
               <label
                 htmlFor="آدرس"
-                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3 col-span-3"
+                className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3 lg:col-span-3"
               >
                 <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
                   آدرس <span className="text-error">*</span>
@@ -390,7 +390,7 @@ export default function Basket() {
           </form>
         </div>
 
-        <div className="bg-background rounded-3xl p-4 flex-1 h-fit max-h-fit min-w-[500px] max-w-[550px] border border-black border-solid">
+        <div className="col-span-1 bg-background rounded-3xl p-4 flex-1 h-fit border-black border-solid border">
           <h4 className="text-center text-2xl font-bold">سفارش شما</h4>
           <hr className="my-4" />
           {basket.list.length ? (
@@ -407,7 +407,7 @@ export default function Basket() {
                       {item.count.toLocaleString("fa-ir")} عدد
                     </span>
                   </p>
-                  <span>
+                  <span className="text-nowrap">
                     {(discountCalculate(productPrice, item.product.discount) * item.count).toLocaleString(
                       "fa-ir"
                     )}{" "}
@@ -455,7 +455,7 @@ export default function Basket() {
 
       <br />
       <br />
-      <ProductsSlider title="محصولات مرتبط" />
+      <ProductsSlider title="محصولات مرتبط" route="/" />
     </>
   );
 }

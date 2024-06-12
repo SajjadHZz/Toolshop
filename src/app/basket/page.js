@@ -25,7 +25,7 @@ export default function Basket() {
       if (user.email) {
         dispatch(
           deleteProductFromUserBasket({
-            url: "http://localhost:3000/api/basket",
+            url: "/api/basket",
             productId: product.product._id,
           })
         );
@@ -38,7 +38,7 @@ export default function Basket() {
   return (
     <>
       <div className="bg-gradient-to-b from-accent to-transparent py-10 relative mb-8">
-        <div className="absolute top-4 right-8">
+        <div className="absolute start-4 top-1 lg:top-4 lg:start-8">
           <Breadcrumbs path={breadcrumbPath} />
         </div>
         <h1 className="font-Lalezar text-6xl text-center mb-8">سبد خرید</h1>
@@ -47,25 +47,25 @@ export default function Basket() {
           باشد حمل و نقل شما رایگان میباشد.
         </p>
       </div>
-      <div className="flex justify-between gap-4 mx-8 h-full">
-        <div className="w-full h-full">
-          <div className="flex justify-center items-center gap-4 bg-background p-4 rounded-3xl mb-4 border border-solid border-black">
-            <p className="flex items-center gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-2 lg:mx-8">
+        <div className="w-full h-fit md:col-span-1 lg:col-span-2">
+          <div className="text-xs md:text-base flex justify-center items-center gap-2 text-nowrap lg:gap-4 bg-background p-4 rounded-3xl mb-4 border border-solid border-black">
+            <p className="flex items-center gap-2 scale-125 translate-x-2">
               <BagHappy />
-              <span className="">سبد خرید</span>
+              <span className="font-bold">سبد خرید</span>
             </p>
             <ArrowLeft />
             <p className="flex items-center gap-2">
               <MoneyIcon />
-              <span className="">تسویه حساب</span>
+              <span>تسویه حساب</span>
             </p>
             <ArrowLeft />
             <p className="flex items-center gap-2">
               <TickCircle />
-              <span className="">ثبت سفارش</span>
+              <span>ثبت سفارش</span>
             </p>
           </div>
-          <div className="bg-background rounded-3xl p-4 h-full min-h-[200px] border border-solid border-black">
+          <div className="bg-background rounded-3xl p-4 h-full min-h-[200px] border border-solid border-black  overflow-auto [&::-webkit-scrollbar]:hidden">
             <table className="divide-y divide-solid divide-black w-full">
               <thead>
                 <tr>
@@ -77,21 +77,26 @@ export default function Basket() {
                 </tr>
               </thead>
 
-              <tbody className="relative h-full">
+              <tbody className="relative h-full ">
                 {basket.list.length ? (
                   basket.list.map((item) => {
-                    const isWholesale = item.count >= item.product.wholesale.number;
+                    const isWholesale =
+                      item.count >= item.product.wholesale.number &&
+                      item.product.wholesale.price < item.product.price;
                     const productPrice = isWholesale ? item.product.wholesale.price : item.product.price;
 
                     return (
-                      <tr key={item._id} className="bg-background transition-colors hover:bg-secondary">
+                      <tr
+                        key={item._id}
+                        className="bg-background transition-colors hover:bg-secondary text-nowrap"
+                      >
                         <td
                           onClick={deleteProductHandler(item)}
                           className="cursor-pointer transition-colors hover:text-error px-2"
                         >
                           ✕
                         </td>
-                        <td className="p-2 relative">
+                        <td className="p-2 relative overflow-auto [&::-webkit-scrollbar]:hidden">
                           <div className="relative inline-block mask mask-squircle ">
                             <img
                               src={item.product.img[0]}
@@ -122,7 +127,7 @@ export default function Basket() {
                             )}
                           </div>
                         </td>
-                        <td className="p-2 text-center">
+                        <td className="p-2 text-center overflow-auto [&::-webkit-scrollbar]:hidden">
                           {(!!item.product.discount || isWholesale) && (
                             <del className="text-sm text-text/40">
                               {item.product.price.toLocaleString("fa-ir")}
@@ -161,7 +166,7 @@ export default function Basket() {
             </table>
           </div>
         </div>
-        <div className="bg-background rounded-3xl p-4 flex-1 h-fit max-h-fit min-w-[400px] max-w-[550px] border border-black border-solid">
+        <div className="bg-background rounded-3xl p-4 h-fit max-h-fit border border-black border-solid">
           <h4 className="text-center text-2xl font-bold">فاکتور سبد خرید</h4>
           <hr className="my-4" />
           <p className="flex justify-between items-center mb-4">
@@ -203,7 +208,7 @@ export default function Basket() {
           </Link>
         </div>
       </div>
-      <ProductsSlider title="محصولات مرتبط" />
+      <ProductsSlider title="محصولات مرتبط" route="/" />
     </>
   );
 }
@@ -215,9 +220,7 @@ function Counter({ productId, price, count, wholesale, wholeNum }) {
 
   function updateCounter(number) {
     if (user.email) {
-      dispatch(
-        updateProductInUserBasket({ url: "http://localhost:3000/api/basket", productId, counter: number })
-      );
+      dispatch(updateProductInUserBasket({ url: "/api/basket", productId, counter: number }));
     } else {
       dispatch(updateProductInLocalStorage({ productId, count: number }));
     }

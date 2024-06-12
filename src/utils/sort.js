@@ -6,9 +6,12 @@ export const oldestProducts = "OLDEST_PRODUCTS";
 
 export function ToastAlert({ title, status, icon }) {
   return (
-    <div role="alert" className={`alert alert-${status} text-white text-sm w-fit animate-fade-in`}>
+    <div
+      role="alert"
+      className={`alert alert-${status} text-white text-xs sm:text-sm w-fit animate-fade-in flex items-center`}
+    >
       {icon}
-      <span>{title}</span>
+      {title}
     </div>
   );
 }

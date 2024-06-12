@@ -7,13 +7,13 @@ const breadcrumbPath = [{ title: "خانه", href: "/" }, { title: "داشبور
 export default async function PanelLayout({ children }) {
   return (
     <>
-      <div className="mx-10 my-4">
+      <div className="mx-2 lg:mx-10 my-4">
         <Breadcrumbs path={breadcrumbPath} />
       </div>
 
-      <div className="flex gap-8 mx-8 my-4 ">
+      <div className="flex gap-8 mx-2 lg:mx-8 my-4 ">
         {/* Sidebar Menu */}
-        <div className="bg-background w-1/3 h-fit max-w-[350px] rounded-3xl overflow-hidden">
+        <div className="bg-background w-1/3 h-fit max-w-[350px] rounded-3xl overflow-hidden hidden lg:block">
           <div className="flex gap-4 items-center bg-accent/80 px-4 pt-4 rounded-t">
             <div className="w-20 h-20 rounded-full bg-gray-400 p-4 border-2 border-solid border-gray-300">
               <svg viewBox="0 0 16 20" fill="none" className="w-full h-full fill-secondary">

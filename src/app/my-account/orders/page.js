@@ -15,7 +15,7 @@ export default function Orders() {
   const orders = useSelector((state) => state.orders);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getOrdersFromUser("http://localhost:3000/api/orders"));
+    dispatch(getOrdersFromUser("/api/orders"));
   }, []);
 
   const statBoxs = [
@@ -55,7 +55,7 @@ export default function Orders() {
         <span>لیست سفارشات</span>
       </h3>
       <hr />
-      <div className="grid grid-cols-4 items-center gap-2 m-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 items-center gap-2 m-4">
         {statBoxs.map((item) => {
           return (
             <div

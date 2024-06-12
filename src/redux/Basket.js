@@ -75,6 +75,26 @@ export const deleteProductFromUserBasket = createAsyncThunk(
   }
 );
 
+export const deleteAllProductFromUserBasket = createAsyncThunk(
+  "Basket/deleteAllProductFromUserBasket",
+  async (url) => {
+    const res = await fetch(url, {
+      method: "POST",
+    });
+    if (res.status === 200) {
+      return await res.json();
+    } else if (res.status === 500) {
+      toast.custom((t) => (
+        <ToastAlert
+          title="سرور با مشکل مواجه شده. لطفا بعدا تلاش کنید"
+          status="error"
+          icon={<CloseCircleIcon size="20" color="white" />}
+        />
+      ));
+    }
+  }
+);
+
 export const updateProductInUserBasket = createAsyncThunk(
   "Basket/updateProductInUserBasket",
   async ({ url, productId, counter }) => {
@@ -125,7 +145,7 @@ const slice = createSlice({
       const isDuplicateProduct = state.list.some((item) => item.product._id === product._id);
       if (!isDuplicateProduct) {
         let totalPrice = 0;
-        if (count >= product.wholesale.number) {
+        if (product.wholesale.price && count >= product.wholesale.number) {
           totalPrice = discountCalculate(product.wholesale.price, product.discount) * count;
         } else {
           totalPrice = discountCalculate(product.price, product.discount) * count;
@@ -208,6 +228,11 @@ const slice = createSlice({
         }
       })
       .addCase(deleteProductFromUserBasket.fulfilled, (state, action) => {
+        if (action.payload) {
+          return action.payload;
+        }
+      })
+      .addCase(deleteAllProductFromUserBasket.fulfilled, (state, action) => {
         if (action.payload) {
           return action.payload;
         }

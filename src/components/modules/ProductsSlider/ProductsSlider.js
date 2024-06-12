@@ -6,7 +6,7 @@ import "swiper/css";
 import ProductCard from "../ProductCard/ProductCard";
 import { useEffect, useState } from "react";
 
-function ProductsSlider({ title }) {
+function ProductsSlider({ title, route }) {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -14,7 +14,7 @@ function ProductsSlider({ title }) {
   }, []);
   async function fetchProducts() {
     setIsLoading(true);
-    const res = await fetch("http://localhost:3000/api/products", {
+    const res = await fetch(`/api/special-products${route}`, {
       next: {
         revalidate: 60 * 60 * 12,
       },
@@ -26,9 +26,9 @@ function ProductsSlider({ title }) {
   }
 
   return (
-    <section className="relative overflow-hidden m-8 py-4 px-2 rounded-3xl bg-background">
-      <div className="relative flex justify-between items-center px-8 mb-4">
-        <h4 className="text-2xl font-bold">{title}</h4>
+    <section className="relative overflow-hidden my-8 mx-2 sm:m-8 py-4 px-2 rounded-3xl bg-background h-fit max-h-fit">
+      <div className="relative flex justify-between items-center px-2 sm:px-8 mb-4">
+        <h4 className="text-xl sm:text-2xl font-bold">{title}</h4>
         <div className="flex items-center gap-2">
           <Arrow class="prev_main_slider" />
           <Arrow class="next_main_slider" left />
@@ -38,20 +38,34 @@ function ProductsSlider({ title }) {
       <Swiper
         autoHeight
         spaceBetween={10}
-        slidesPerView={5}
+        slidesPerView={1}
         modules={[Navigation]}
         navigation={{
           prevEl: ".prev_main_slider",
           nextEl: ".next_main_slider",
         }}
-        className="mySwiper"
+        breakpoints={{
+          400: {
+            slidesPerView: 2,
+          },
+          600: {
+            slidesPerView: 3,
+          },
+          800: {
+            slidesPerView: 4,
+          },
+          1100: {
+            slidesPerView: 5,
+          },
+        }}
+        className="mySwiper h-fit max-h-fit"
       >
         {isLoading
           ? [1, 2, 3, 4, 5].map((item) => {
               return (
                 <SwiperSlide
                   key={item}
-                  className="h-full min-h-full overflow-hidden rounded-xl bg-white shadow max-h-none"
+                  className="h-fit min-h-fit overflow-hidden rounded-xl bg-white shadow max-h-fit"
                 >
                   <div className="h-full overflow-hidden rounded-xl bg-gray-200 animate-pulse shadow relative">
                     <div className="relative group ">
@@ -79,7 +93,7 @@ function ProductsSlider({ title }) {
               return (
                 <SwiperSlide
                   key={product._id}
-                  className="h-full min-h-full overflow-hidden rounded-xl bg-white shadow max-h-none"
+                  className=" min-h-fit h-fit overflow-hidden rounded-xl bg-white shadow max-h-fit"
                 >
                   <ProductCard
                     _id={product._id}
@@ -102,9 +116,7 @@ function Arrow(props) {
   return (
     <svg
       onClick={props.onClick}
-      className={`rounded-full p-2 bg-secondary stroke-primary cursor-pointer select-none transition duration-300 delay-75 hover:scale-110 ${props.class}`}
-      width="50"
-      height="50"
+      className={`rounded-full w-10 sm:w-12 h-10 sm:h-12 p-2 bg-secondary stroke-primary cursor-pointer select-none transition duration-300 delay-75 hover:scale-110 ${props.class}`}
       viewBox="0 0 40 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

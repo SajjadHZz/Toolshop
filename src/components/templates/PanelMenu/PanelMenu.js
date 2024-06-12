@@ -41,7 +41,7 @@ export default function PanelMenu() {
   ];
 
   function signoutUserHandler() {
-    dispatch(signoutUserFromServer("http://localhost:3000/api/auth/signout"));
+    dispatch(signoutUserFromServer("/api/auth/signout"));
   }
 
   return (

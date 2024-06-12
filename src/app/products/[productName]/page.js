@@ -18,37 +18,70 @@ export default async function DetailProducts({ params }) {
 
   return (
     <>
-      {/* Codes */}
-      <div className="mx-8 my-4">
+      {/* Breadcrumbs */}
+      <div className="mx-2 lg:mx-8 my-4">
         <Breadcrumbs path={breadcrumbPath} />
       </div>
-      <main className="flex justify-between gap-8 mx-8 my-4 p-8 bg-background rounded-3xl border border-solid border-text/20">
-        <div className="w-1/3">
+      {/* End Breadcrumbs */}
+
+      {/* Main Content */}
+      <main className="grid grid-cols-1 lg:grid-cols-3 gap-8 mx-2 lg:mx-8 my-4 p-2 lg:p-8 bg-background rounded-3xl border border-solid border-text/20">
+        {/* Product Images */}
+        <div className="col-span-1">
           <ProductImages img={product.img} />
         </div>
-        <div className="w-2/3">
+        {/* End Product Images */}
+
+        {/* Product Content */}
+        <div className="col-span-1 lg:col-span-2">
+          {/* Product Title */}
           <div className="flex justify-between items-center">
-            <h1 className="font-Lalezar text-2xl">{product.name}</h1>
+            <h1 className="font-Lalezar text-xl lg:text-2xl">{product.name}</h1>
             <img src={product.brand.img} alt="Product-Image" className="w-40 h-14 object-contain" />
           </div>
+          {/* End Product Title */}
+
           <hr />
-          <div className="flex justify-between gap-4 py-4">
-            <div className="w-1/2">
+
+          {/* Content */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+            {/* Right Content */}
+            <div className="col-span-1">
+              {/* Product Attributes */}
               <div>
                 <h4 className="font-bold mb-2">ویژگی های محصول :</h4>
                 <ul className="list-disc text-text/60 mr-8 mb-4 leading-loose text-sm">
-                  {product.attributes.map((item, index) => {
-                    return <li key={index}>{item}</li>;
-                  })}
+                  {product.attributes.length ? (
+                    product.attributes.map((item, index) => {
+                      return <li key={"attributes_product_" + index + item}>{item}</li>;
+                    })
+                  ) : (
+                    <li>ویژگی برای محصول درج نشده است</li>
+                  )}
                 </ul>
               </div>
+              {/* End Product Attributes */}
+
               <hr />
+
+              {/* Product Labels */}
               <div className="text-xs py-2 mb-4">
                 <h6 className="font-bold inline-block mx-2">برچسب :</h6>
-                {[product.labels.join(" ، ")].map((item) => {
-                  return <span className="text-text/60">{item}</span>;
-                })}
+                {!!product.labels.length ? (
+                  [product.labels.join(" ، ")].map((item, index) => {
+                    return (
+                      <span key={item + index} className="text-text/60">
+                        {item}
+                      </span>
+                    );
+                  })
+                ) : (
+                  <span>برچسبی برای محصول وجود ندارد.</span>
+                )}
               </div>
+              {/* End Product Labels */}
+
+              {/* Free Delivery */}
               <div className="shadow border border-solid border-text/20 p-2 rounded-lg flex justify-between items-center">
                 <div>
                   <div className="mb-2">
@@ -81,8 +114,13 @@ export default async function DetailProducts({ params }) {
                   className="flex-1 h-full bg-cover object-cover w-full"
                 />
               </div>
+              {/* End Free Delivery */}
             </div>
-            <div className="w-1/2 px-4 py-2 bg-secondary border border-solid border-black/20 rounded">
+            {/* End Right Content */}
+
+            {/* Left Content */}
+            <div className="col-span-1 px-4 py-2 bg-secondary border border-solid border-black/20 rounded">
+              {/* Garanty */}
               <div className="mb-4 mt-2">
                 <div>
                   <svg
@@ -91,7 +129,6 @@ export default async function DetailProducts({ params }) {
                     height="20"
                     viewBox="0 0 16 20"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
                   >
                     <path
                       d="M13.8099 3.49V4.23L10.2699 2.18C8.92994 1.41 7.05994 1.41 5.72994 2.18L2.18994 4.24V3.49C2.18994 1.24 3.41994 0 5.66994 0H10.3299C12.5799 0 13.8099 1.24 13.8099 3.49Z"
@@ -109,7 +146,11 @@ export default async function DetailProducts({ params }) {
                   <span className="font-bold">اصالت و سلامت فیزیکی کالا</span>
                 </div>
               </div>
+              {/* End Garanty */}
+
               <hr />
+
+              {/* Delivery */}
               <div className="my-4">
                 <div>
                   <svg
@@ -117,7 +158,6 @@ export default async function DetailProducts({ params }) {
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
                     className="fill-accent inline-block"
                   >
                     <path d="M21.5 15.5C21.78 15.5 22 15.72 22 16V17C22 18.66 20.66 20 19 20C19 18.35 17.65 17 16 17C14.35 17 13 18.35 13 20H11C11 18.35 9.65 17 8 17C6.35 17 5 18.35 5 20C3.34 20 2 18.66 2 17V15C2 14.45 2.45 14 3 14H12.5C13.88 14 15 12.88 15 11.5V6C15 5.45 15.45 5 16 5H16.84C17.56 5 18.22 5.39 18.58 6.01L19.22 7.13C19.31 7.29 19.19 7.5 19 7.5C17.62 7.5 16.5 8.62 16.5 10V13C16.5 14.38 17.62 15.5 19 15.5H21.5Z" />
@@ -142,9 +182,13 @@ export default async function DetailProducts({ params }) {
                   </li>
                 </ul>
               </div>
+              {/* End Delivery */}
+
               <hr />
-              <div className="flex justify-center items-cente my-4 text-center bg-secondary rounded-xl ">
-                <div className=" w-1/2">
+
+              {/* Product Price */}
+              <div className="flex justify-center items-cente my-4 text-center bg-secondary rounded-xl divide-x-2 divide-solid divide-base-300 divide-x-reverse">
+                <div className="w-1/2 px-2">
                   <h5 className="text-lg font-bold mb-4">قیمت تک</h5>
                   {!!product.discount && (
                     <del className="text-text/40">{product.price.toLocaleString("fa")} تومان</del>
@@ -153,9 +197,9 @@ export default async function DetailProducts({ params }) {
                     {discountCalculate(product.price, product.discount).toLocaleString("fa")} تومان
                   </p>
                 </div>
-                <div className="divider divider-horizontal"></div>
+
                 {!!product.wholesale.price && (
-                  <div className="w-1/2 min-w-fit">
+                  <div className="w-1/2 px-2 min-w-fit">
                     <h5 className="text-lg font-bold mb-4">
                       قیمت عمده{" "}
                       <span className="text-sm font-normal">
@@ -172,15 +216,25 @@ export default async function DetailProducts({ params }) {
                   </div>
                 )}
               </div>
+              {/* End Product Price */}
+
+              {/* Add To Basket */}
               <div className="flex gap-4">
                 <ProductCounter {...product} />
               </div>
+              {/* End Add To Basket */}
             </div>
+            {/* End Left Content */}
           </div>
+          {/* End Content */}
         </div>
+        {/* End Product Content */}
       </main>
-      <div className="flex justify-between gap-8 px-8 py-4 my-4">
-        <div className="w-2/3 p-8 bg-background border-2 border-solid border-text/10 rounded-3xl">
+      {/* End Main Content */}
+
+      {/* Product Descriptions */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-8 gap-y-8 px-2 lg:px-8 py-4 my-4">
+        <div className="col-span-2 h-fit p-8 bg-background border-2 border-solid border-text/10 rounded-3xl">
           <div className="mb-8">
             <svg
               width="30"
@@ -199,34 +253,13 @@ export default async function DetailProducts({ params }) {
 
             <h3 className="font-bold inline-block mx-2">توضیحات محصول</h3>
           </div>
-          <h4 className="mb-8 text-2xl text-primary font-bold text-center">
-            ابزار همه کاره آلمانی ورد تول (world-tool) مدل G08
-          </h4>
-          <h5 className="font-bold mb-2">ابزار چند کاره چیست؟</h5>
-          <p className="text-sm leading-loose text-justify">
-            ابزارهای چند کاره همانطور که از نامشان متوجه می شویم، یک ابزار با چندین کاربرد متفاوت و جدا از هم
-            می باشند. در واقع یک ابزار است که کار چند ابزار را با استفاده از افزونه ها و قابلیت های موجود در
-            یک ابزار انجام می دهد. (توجه!!! در ادامه مطالب یکی از نمونه های ابزار های چندکاره با قیمت عالی به
-            نام ابزار همه کاره ورد تول مدل G08 را به شما عزیزان معرفی خواهیم کرد.)
-          </p>
-          <br />
-          <p className="text-sm leading-loose text-justify">
-            *** شاید با خودتان تصور کنید که منظور از ابزار های چند کاره همین چاقو هایی است که پیچ گوشتی و ناخن
-            گیر و قاشق و … را در کنار هم دارند. اما سخت در تصورات اشتباهی گرفتار شده اید. آن نمونه از ابزار
-            های چند کاره تقریبا ساده ترین و کم کاربرد ترین نمونه های ابزار چند کاره می باشند. ما ابزار هایی
-            چند کاره داریم که بیش از 10 کاربرد واقعی دارند. پس نیاز است تا توضیحات کاملی درباره ابزار های چند
-            کاره بدهیم. با ما همراه باشید…
-          </p>
-          <br />
-          <p className="text-sm leading-loose text-justify">
-            ابزارهای چند کاره همانطور که از نامشان متوجه می شویم، یک ابزار با چندین کاربرد متفاوت و جدا از هم
-            می باشند. در واقع یک ابزار است که کار چند ابزار را با استفاده از افزونه ها و قابلیت های موجود در
-            یک ابزار انجام می دهد. (توجه!!! در ادامه مطالب یکی از نمونه های ابزار های چندکاره با قیمت عالی به
-            نام ابزار همه کاره ورد تول مدل G08 را به شما عزیزان معرفی خواهیم کرد.)
-          </p>
-          <br />
+          {product.describtion ? (
+            <div dangerouslySetInnerHTML={{ __html: product.describtion }}></div>
+          ) : (
+            <p className="text-sm text-center">برای این محصول توضیحاتی درج نشده است</p>
+          )}
         </div>
-        <div className="w-1/3 h-fit p-8 bg-background border-2 border-solid border-text/10 rounded-3xl">
+        <div className="col-span-1 h-fit p-8 bg-background border-2 border-solid border-text/10 rounded-3xl">
           <div className="mb-8">
             <svg
               className="fill-primary inline-block"
@@ -241,36 +274,31 @@ export default async function DetailProducts({ params }) {
 
             <h3 className="font-bold inline-block mx-2">مشخصات محصول</h3>
           </div>
-          <ul>
-            <li className="flex justify-between items-center my-4">
-              <p>وزن : </p>
-              <p className="font-bold">0.350 کیلوگرم</p>
-            </li>
-            <hr />
-            <li className="flex justify-between items-center my-4">
-              <p>ابعاد : </p>
-              <p className="font-bold">24 × 20 × 5 سانتیمتر</p>
-            </li>
-            <hr />
-            <li className="flex justify-between items-center my-4">
-              <p>برند : </p>
-              <p className="font-bold">توسان</p>
-            </li>
-            <hr />
-            <li className="flex justify-between items-center my-4">
-              <p>گارانتی : </p>
-              <p className="font-bold">اصالت و سلامت فیزیکی کالا</p>
-            </li>
+          <ul className="divide-y divide-solid divide-base-300">
+            {product.specifications?.length ? (
+              product.specifications.map((item) => {
+                return (
+                  <li key={item._id} className="flex justify-between items-center py-4">
+                    <p>{item.key} : </p>
+                    <p className="font-bold">{item.value}</p>
+                  </li>
+                );
+              })
+            ) : (
+              <li className="text-sm text-center">مشخصاتی برای محصول درج نشده است</li>
+            )}
           </ul>
         </div>
       </div>
-      <ProductsSlider title="محصولات مرتبط" />
+      {/* End Product Descriptions */}
+
+      <ProductsSlider title="محصولات مرتبط" route="/" />
     </>
   );
 }
 
 async function fetchProducts(product) {
-  const res = await fetch(`http://localhost:3000/api/products/${product}`, { cache: "no-store" });
+  const res = await fetch(`${process.env.BASE_URL}/api/products/${product}`, { cache: "no-store" });
   if (res.status === 200) {
     return await res.json();
   } else {

@@ -18,7 +18,7 @@ export default function FavoriteBox({ _id, img, name, discount, price, wholesale
     if (user.email) {
       dispatch(
         deleteProductFromUserFavorite({
-          url: "http://localhost:3000/api/favorite",
+          url: "/api/favorite",
           productId: _id,
         })
       );
@@ -29,9 +29,7 @@ export default function FavoriteBox({ _id, img, name, discount, price, wholesale
 
   function productsToBasketHandler() {
     if (user.email) {
-      dispatch(
-        addProductToUserBasket({ url: "http://localhost:3000/api/basket", productId: _id, count: counter })
-      );
+      dispatch(addProductToUserBasket({ url: "/api/basket", productId: _id, count: counter }));
     } else {
       dispatch(
         addProductToLocalStorage({
@@ -71,7 +69,7 @@ export default function FavoriteBox({ _id, img, name, discount, price, wholesale
       <div className="w-full">
         <h4 className="font-bold">{name}</h4>
         <div className="flex gap-4">
-          <div className="flex-1 flex justify-center items-center border border-solid border-text/20 divide-x divide-solid divide-text/20 divide-x-reverse my-4 text-center bg-background rounded-xl py-2">
+          <div className="flex-1 hidden sm:flex justify-center items-center border border-solid border-text/20 divide-x divide-solid divide-text/20 divide-x-reverse my-4 text-center bg-background rounded-xl py-2">
             <div className="px-4 w-1/2">
               <h5 className="font-bold mb-4">قیمت تک</h5>
               {!!discount && <del className="text-text/40">{price.toLocaleString("fa")} تومان</del>}

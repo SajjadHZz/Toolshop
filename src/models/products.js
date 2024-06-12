@@ -38,7 +38,7 @@ const schema = new Schema(
       type: Number,
       default: 0,
     },
-    specifications: [String],
+    specifications: [{ key: String, value: String }],
     describtion: String,
   },
   { timestamps: true }

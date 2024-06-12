@@ -9,12 +9,26 @@ function BrandCarosel({ brands }) {
   return (
     <Swiper
       loop
+      breakpoints={{
+        500: {
+          slidesPerView: 3,
+          spaceBetween: 20,
+        },
+        850: {
+          slidesPerView: 4,
+          spaceBetween: 20,
+        },
+        1100: {
+          slidesPerView: 5,
+          spaceBetween: 20,
+        },
+      }}
       autoplay={{
         delay: 2000,
         disableOnInteraction: false,
       }}
-      slidesPerView={5}
-      spaceBetween={20}
+      slidesPerView={2}
+      spaceBetween={15}
       freeMode={true}
       centeredSlides={true}
       modules={[FreeMode, Autoplay]}

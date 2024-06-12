@@ -11,9 +11,7 @@ export default function ProductCounter({ _id, img, name, price, wholesale, disco
 
   function productsToBasketHandler() {
     if (user.email) {
-      dispatch(
-        addProductToUserBasket({ url: "http://localhost:3000/api/basket", productId: _id, count: counter })
-      );
+      dispatch(addProductToUserBasket({ url: "/api/basket", productId: _id, count: counter }));
     } else {
       dispatch(
         addProductToLocalStorage({
@@ -30,7 +28,7 @@ export default function ProductCounter({ _id, img, name, price, wholesale, disco
           onClick={() => {
             setCounter((prev) => prev + 1);
           }}
-          className="btn  btn-outline btn-primary join-item rounded-l-full"
+          className="btn  btn-outline btn-primary join-item rounded-l-full active:bg-primary active:text-primary-content"
         >
           +
         </button>
@@ -43,7 +41,7 @@ export default function ProductCounter({ _id, img, name, price, wholesale, disco
               setCounter((prev) => prev - 1);
             }
           }}
-          className="btn btn-outline btn-primary join-item rounded-r-full"
+          className="btn btn-outline btn-primary join-item rounded-r-full active:bg-primary active:text-primary-content"
         >
           -
         </button>

@@ -6,6 +6,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 import QuicklyAccessProducts from "@/components/templates/QuicklyAccessProducts/QuicklyAccessProducts";
 import { Toaster } from "react-hot-toast";
+import SearchBoxNav from "@/components/templates/SearchBoxNav/SearchBoxNav";
 
 export const metadata = {
   title: "ToolShop | فروشگاه ابزار",
@@ -34,6 +35,17 @@ export default async function RootLayout({ children }) {
               <h4 className="text-4xl font-Lalezar">عضویت</h4>
 
               <SigninForm />
+            </div>
+          </div>
+
+          {/* Search Modal */}
+          <input type="checkbox" id="search-navbar-modal" className="modal-toggle" />
+          <div className="modal" role="dialog">
+            <label className="modal-backdrop" htmlFor="search-navbar-modal">
+              Close
+            </label>
+            <div className="modal-box overflow-visible">
+              <SearchBoxNav modal="true" />
             </div>
           </div>
 

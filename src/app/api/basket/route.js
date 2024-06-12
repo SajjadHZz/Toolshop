@@ -22,6 +22,27 @@ export async function GET() {
   }
 }
 
+export async function POST() {
+  try {
+    connectToDB();
+    const tokenPayload = isValidToken();
+    if (!tokenPayload) {
+      return Response.json({ message: "You are't loggined" }, { status: 401 });
+    }
+
+    const user = await UserModel.findOne({ email: tokenPayload.email }, "basket").populate(
+      "basket.list.product"
+    );
+
+    user.basket.sumPrice = 0;
+    user.basket.list = [];
+    user.save();
+
+    return Response.json(user.basket, { status: 200 });
+  } catch (err) {
+    return Response.json(err, { status: 500 });
+  }
+}
 export async function PUT(req) {
   try {
     connectToDB();

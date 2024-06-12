@@ -7,7 +7,7 @@ import {
   oldestProducts,
 } from "@/utils/sort";
 
-const filterList = [];
+let filterList = [];
 
 export const addProductsToServer = createAsyncThunk("Products/addProductsToServer", async ({ url, body }) => {
   return fetch(url, {
@@ -40,12 +40,13 @@ const slice = createSlice({
         case latestProducts:
           return state.sort(
             (firstProduct, secondeProduct) =>
-              new Date(firstProduct.updatedAt).getTime() - new Date(secondeProduct.updatedAt).getTime()
+              new Date(secondeProduct.updatedAt).getTime() - new Date(firstProduct.updatedAt).getTime()
           );
+
         case oldestProducts:
           return state.sort(
             (firstProduct, secondeProduct) =>
-              new Date(secondeProduct.updatedAt).getTime() - new Date(firstProduct.updatedAt).getTime()
+              new Date(firstProduct.updatedAt).getTime() - new Date(secondeProduct.updatedAt).getTime()
           );
 
         case bestSellingProducts:
@@ -63,7 +64,7 @@ const slice = createSlice({
     builder
       .addCase(getProductsFromServer.fulfilled, (state, action) => {
         if (action.payload) {
-          filterList.push(...action.payload);
+          filterList = action.payload;
           return action.payload;
         }
       })

@@ -12,7 +12,7 @@ function SignupForm() {
 
   async function registerHandler(e) {
     e.preventDefault();
-    dispatch(signupUserToServer({ url: "http://localhost:3000/api/auth/signup", email, password, basket }));
+    dispatch(signupUserToServer({ url: "/api/auth/signup", email, password, basket }));
   }
   return (
     <form onSubmit={registerHandler} className="px-2 pt-4">

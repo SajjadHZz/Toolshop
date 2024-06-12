@@ -11,7 +11,7 @@ export default function Favorites() {
   const favorites = useSelector((state) => state.favorite);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProductFromUserFavorite("http://localhost:3000/api/favorite"));
+    dispatch(getProductFromUserFavorite("/api/favorite"));
   }, []);
 
   useEffect(() => {
@@ -20,12 +20,12 @@ export default function Favorites() {
 
   return (
     <div className="bg-background flex-1 w-2/3 relative rounded-3xl">
-      <h3 className="text-4xl font-Lalezar m-4 flex gap-4 items-center">
+      <h3 className="text-3xl lg:text-4xl font-Lalezar m-4 flex gap-4 items-center">
         <HeartFillIcon size="30" color="primary" />
         لیست علاقه‌مندی ها
       </h3>
       <hr />
-      <div className="p-2">
+      <div className="p-2 min-h-60">
         {isLoading ? (
           <div className="flex gap-4 items-center border border-solid border-text/5 p-2 rounded-xl mb-2 animate-pulse">
             <div className="relative group animate-pulse">
@@ -62,7 +62,7 @@ export default function Favorites() {
             />
           ))
         ) : (
-          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl">
+          <p className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xl text-nowrap">
             هیچ محصولی یافت نشد !
           </p>
         )}

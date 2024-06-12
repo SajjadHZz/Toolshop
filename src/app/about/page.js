@@ -12,7 +12,7 @@ const statistics = [
 ];
 
 export default async function AboutUs() {
-  const res = await fetch("http://localhost:3000/api/brands");
+  const res = await fetch("/api/brands");
   const brands = await res.json();
   return (
     <>

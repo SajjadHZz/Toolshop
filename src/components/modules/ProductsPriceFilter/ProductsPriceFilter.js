@@ -1,7 +1,7 @@
 "use client";
-import { filterProducts, getProductsFromServer } from "@/redux/Products";
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { filterProducts } from "@/redux/Products";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function ProductsPriceFilter() {
   const minimumPrice = 1_000_000,
@@ -14,9 +14,10 @@ export default function ProductsPriceFilter() {
   function filterPriceHandler() {
     dispatch(filterProducts(priceRenge));
   }
+
   return (
     <div className="bg-background rounded-3xl p-4 mb-4">
-      <h4 className="text-2xl font-bold mb-4">فیلتر براساس قیمت</h4>
+      <h4 className="text-2xl font-Lalezar ms-2 mb-4">فیلتر براساس قیمت</h4>
       <hr />
       <div className="my-4">
         <input

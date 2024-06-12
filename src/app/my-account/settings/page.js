@@ -30,7 +30,7 @@ export default function Settings() {
   }, [state]);
 
   async function fetchUserInfos() {
-    const res = await fetch("http://localhost:3000/api/user-infos");
+    const res = await fetch("/api/user-infos");
     if (res.status === 200) {
       const data = await res.json();
       setFirstname(data?.firstname);
@@ -78,7 +78,7 @@ export default function Settings() {
       company,
       postalCode,
     };
-    const res = await fetch("http://localhost:3000/api/user-infos", {
+    const res = await fetch("/api/user-infos", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -91,16 +91,16 @@ export default function Settings() {
   }
 
   return (
-    <div className="bg-background flex-1 w-2/3 rounded-3xl">
+    <div className="bg-background flex-1 w-fit lg:w-2/3 rounded-3xl">
       <h3 className="text-4xl font-Lalezar m-4 flex gap-4 items-center">
         <DetailsUserFillIcon size="30" color="primary" />
         جزئیات حساب
       </h3>
       <hr />
-      <form className="p-8 grid grid-cols-3 gap-x-4 gap-y-8">
+      <form className="px-4 py-8 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-x-4 gap-y-8">
         <label
           htmlFor="نام"
-          className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+          className="inline-block col-span-1 border border-solid border-text/20 rounded-xl relative px-4 py-3"
         >
           <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
             نام <span className="text-error">*</span>
@@ -116,7 +116,7 @@ export default function Settings() {
         </label>
         <label
           htmlFor="نام خانوادگی"
-          className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+          className="col-span-1 inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
         >
           <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
             نام خانوادگی <span className="text-error">*</span>
@@ -132,7 +132,7 @@ export default function Settings() {
         </label>
         <label
           htmlFor="شماره همراه"
-          className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
+          className="col-span-1 inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3"
         >
           <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
             شماره همراه <span className="text-error">*</span>
@@ -212,7 +212,7 @@ export default function Settings() {
         </label>
         <label
           htmlFor="آدرس"
-          className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3 col-span-3"
+          className="inline-block border border-solid border-text/20 rounded-xl relative px-4 py-3 lg:col-span-3"
         >
           <p className="text-sm absolute -top-3 right-4 bg-background px-2 rounded">
             آدرس <span className="text-error">*</span>
