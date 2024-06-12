@@ -12,11 +12,10 @@ const statistics = [
 ];
 
 export default async function AboutUs() {
-  // const res = await fetch(`${process.env.BASE_URL}/api/brands`, {
-  //   next: { revalidate: 604800 /* 1 Week */ },
-  // });
-  // const brands = await res.json();
-  const brands = [];
+  const res = await fetch(`${process.env.BASE_URL}/api/brands`, {
+    next: { revalidate: 604800 /* 1 Week */ },
+  });
+  const brands = await res.json();
 
   return (
     <>

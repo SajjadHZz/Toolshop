@@ -1,8 +1,8 @@
 import Link from "next/link";
 
 export default async function ProductsCategoryFilter() {
-  // const category = await fetchCategries();
-  const category = [];
+  const category = await fetchCategries();
+
   return (
     <div className="bg-background rounded-3xl p-4 mb-4">
       <h4 className="text-2xl font-Lalezar ms-2 mb-4">دسته‌بندی محصولات</h4>
@@ -36,9 +36,9 @@ export default async function ProductsCategoryFilter() {
   );
 }
 
-// async function fetchCategries() {
-//   const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
-//     next: { revalidate: 604800 /* 1 Week */ },
-//   });
-//   return res.json();
-// }
+async function fetchCategries() {
+  const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
+    next: { revalidate: 604800 /* 1 Week */ },
+  });
+  return res.json();
+}
