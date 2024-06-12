@@ -1,7 +1,8 @@
 import Link from "next/link";
 
 export default async function ProductsBrandFilter() {
-  const brands = await fetchBrands();
+  // const brands = await fetchBrands();
+  const brands = [];
   return (
     <div className="bg-background rounded-3xl py-4 px-2">
       <h4 className="text-2xl font-Lalezar ms-4 mb-4">فیلتر براساس برند</h4>
@@ -31,13 +32,13 @@ export default async function ProductsBrandFilter() {
   );
 }
 
-async function fetchBrands() {
-  const res = await fetch(`${process.env.BASE_URL}/api/brands`, {
-    next: { revalidate: 604800 /* 1 Week */ },
-  });
-  if (res.status === 200) {
-    return await res.json();
-  } else {
-    return [];
-  }
-}
+// async function fetchBrands() {
+//   const res = await fetch(`${process.env.BASE_URL}/api/brands`, {
+//     next: { revalidate: 604800 /* 1 Week */ },
+//   });
+//   if (res.status === 200) {
+//     return await res.json();
+//   } else {
+//     return [];
+//   }
+// }

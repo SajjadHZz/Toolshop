@@ -5,10 +5,12 @@ import ProductsPriceFilter from "@/components/modules/ProductsPriceFilter/Produc
 import ShowProducts from "@/components/templates/ShowProducts/ShowProducts";
 
 export default async function Products({ searchParams }) {
-  const res = await fetch(`${process.env.BASE_URL}/api/categories/${searchParams?.category}`, {
-    cache: "no-store",
-  });
-  const category = await res.json();
+  // const res = await fetch(`${process.env.BASE_URL}/api/categories/${searchParams?.category}`, {
+  //   cache: "no-store",
+  // });
+  // const category = await res.json();
+  const category = [];
+
   const breadcrumbPath =
     category?.name && searchParams?.category === category.name
       ? [

@@ -8,8 +8,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home() {
-  const brands = await fetchBrands();
-  const categories = await fetchCategries();
+  // const brands = await fetchBrands();
+  // const categories = await fetchCategries();
+  const brands = [];
+  const categories = [];
 
   return (
     <>
@@ -113,19 +115,19 @@ export default async function Home() {
   );
 }
 
-async function fetchBrands() {
-  const res = await fetch(`${process.env.BASE_URL}/api/brands`, {
-    next: { revalidate: 604800 /* 1 Week */ },
-  });
-  if (res.status === 200) {
-    return await res.json();
-  } else {
-    return [];
-  }
-}
-async function fetchCategries() {
-  const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
-    next: { revalidate: 604600 /*1 Week */ },
-  });
-  return res.json();
-}
+// async function fetchBrands() {
+//   const res = await fetch(`${process.env.BASE_URL}/api/brands`, {
+//     next: { revalidate: 604800 /* 1 Week */ },
+//   });
+//   if (res.status === 200) {
+//     return await res.json();
+//   } else {
+//     return [];
+//   }
+// }
+// async function fetchCategries() {
+//   const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
+//     next: { revalidate: 604600 /*1 Week */ },
+//   });
+//   return res.json();
+// }

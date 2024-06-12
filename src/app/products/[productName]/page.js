@@ -11,9 +11,9 @@ export default async function DetailProducts({ params }) {
   const breadcrumbPath = [
     { title: "خانه", href: "/" },
     { title: "محصولات", href: "/products" },
-    { title: product.category.main, href: `/products?category=${product.category.main}` },
-    { title: product.category.sub, href: `/products?category=${product.category.sub}` },
-    { title: product.name },
+    { title: product?.category.main, href: `/products?category=${product.category.main}` },
+    { title: product?.category.sub, href: `/products?category=${product.category.sub}` },
+    { title: product?.name },
   ];
 
   return (
@@ -302,6 +302,18 @@ async function fetchProducts(product) {
   if (res.status === 200) {
     return await res.json();
   } else {
-    return [];
+    return {
+      _id: "",
+      name: "",
+      img: [],
+      labels: [],
+      attributes: [],
+      describtion: "",
+      specifications: [],
+      price: 0,
+      wholesale: { price: 0 },
+      brand: { name: "", img: "", _id: "" },
+      category: { main: "", sub: "" },
+    };
   }
 }

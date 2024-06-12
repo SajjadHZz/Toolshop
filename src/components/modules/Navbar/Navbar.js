@@ -9,10 +9,11 @@ import SearchBoxNav from "@/components/templates/SearchBoxNav/SearchBoxNav";
 import { ShoppingHelp } from "../Svgs/Svgs";
 
 export default async function Navbar() {
-  const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
-    next: { revalidate: 604800 /*1 Week */ },
-  });
-  const categories = await res.json();
+  // const res = await fetch(`${process.env.BASE_URL}/api/categories`, {
+  //   next: { revalidate: 604800 /*1 Week */ },
+  // });
+  // const categories = await res.json();
+  const categories = [];
 
   return (
     <>
