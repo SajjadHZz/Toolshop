@@ -7,7 +7,6 @@ import {
   TelegramIcon,
   WhatsappIcon,
 } from "@/components/modules/Svgs/Svgs";
-import Link from "next/link";
 const breadcrumbPath = [{ title: "خانه", href: "/" }, { title: "تماس با ما" }];
 const socialSize = 60;
 

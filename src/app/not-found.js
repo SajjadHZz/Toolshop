@@ -1,7 +1,5 @@
-import Breadcrumbs from "@/components/modules/Breadcrumbs/Breadcrumbs";
 import Image from "next/image";
 import Link from "next/link";
-const breadcrumbPath = [{ title: "خانه", href: "/" }, { title: "سیاست حفظ حریم خصوصی" }];
 
 export default function NotFound() {
   return (
@@ -19,7 +17,7 @@ export default function NotFound() {
           مجددا امتحان کنید یا به صفحه اصلی وبسایت مراجعه کنید.
         </p>
         <div className="mx-auto w-fit">
-          <Link href="/" scroll={true} className="btn btn-primary px-20">
+          <Link href="/" className="btn btn-primary px-20">
             بازگشت به صفحه اصلی
           </Link>
         </div>
