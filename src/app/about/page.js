@@ -48,9 +48,12 @@ export default async function AboutUs() {
           کارنامه کاری TOOLSHOP
         </h4>
         <div className="flex justify-between gap-8">
-          {statistics.map((item) => {
+          {statistics.map((item, index) => {
             return (
-              <div className="flex-1 h-40 bg-background flex flex-col justify-center items-center rounded-3xl shadow-xl">
+              <div
+                key={"statistics_about_" + index + item.id}
+                className="flex-1 h-40 bg-background flex flex-col justify-center items-center rounded-3xl shadow-xl"
+              >
                 <p className="text-6xl text-primary mb-2" dir="ltr">
                   {item.stat}
                 </p>
