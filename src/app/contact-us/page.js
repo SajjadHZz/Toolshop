@@ -1,4 +1,3 @@
-import AddressMap from "@/components/modules/AddressMap/AddressMap";
 import Breadcrumbs from "@/components/modules/Breadcrumbs/Breadcrumbs";
 import {
   AparatIcon,
@@ -99,7 +98,6 @@ export default function ContactUs() {
         <InstagramIcon socialSize={socialSize} />
         <AparatIcon socialSize={socialSize} />
       </div>
-      <div className="w-full h-96">{/* <AddressMap /> */}</div>
     </>
   );
 }
